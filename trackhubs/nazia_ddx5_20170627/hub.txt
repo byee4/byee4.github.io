@@ -1,5 +1,0 @@
-hub nazia_ddx5_20170627
-shortLabel nazia_ddx5_20170627
-longLabel nazia_ddx5_20170627
-genomesFile nazia_ddx5_20170627.genomes.txt
-email adomissy@ucsd.edu
