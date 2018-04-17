@@ -2779,33 +2779,33 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       }
 
       // Edit JSON Button
-      this.editjson_button = this.getButton('JSON','edit','Edit JSON');
-      this.editjson_button.addEventListener('click',function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        self.toggleEditJSON();
-      });
-      this.editjson_controls.appendChild(this.editjson_button);
-      this.editjson_controls.appendChild(this.editjson_holder);
+      // this.editjson_button = this.getButton('JSON','edit','Edit JSON');
+      // this.editjson_button.addEventListener('click',function(e) {
+      //   e.preventDefault();
+      //   e.stopPropagation();
+      //   self.toggleEditJSON();
+      // });
+      // this.editjson_controls.appendChild(this.editjson_button);
+      // this.editjson_controls.appendChild(this.editjson_holder);
 
       // Edit JSON Buttton disabled
-      if(this.schema.options && typeof this.schema.options.disable_edit_json !== "undefined") {
-        if(this.schema.options.disable_edit_json) this.editjson_button.style.display = 'none';
-      }
-      else if(this.jsoneditor.options.disable_edit_json) {
-        this.editjson_button.style.display = 'none';
-      }
+      // if(this.schema.options && typeof this.schema.options.disable_edit_json !== "undefined") {
+      //   if(this.schema.options.disable_edit_json) this.editjson_button.style.display = 'none';
+      // }
+      // else if(this.jsoneditor.options.disable_edit_json) {
+      //   this.editjson_button.style.display = 'none';
+      // }
 
       // Object Properties Button
-      this.addproperty_button = this.getButton('Properties','edit','Object Properties');
-      this.addproperty_button.addEventListener('click',function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        self.toggleAddProperty();
-      });
-      this.addproperty_controls.appendChild(this.addproperty_button);
-      this.addproperty_controls.appendChild(this.addproperty_holder);
-      this.refreshAddProperties();
+      // this.addproperty_button = this.getButton('Properties','edit','Object Properties');
+      // this.addproperty_button.addEventListener('click',function(e) {
+      //   e.preventDefault();
+      //   e.stopPropagation();
+      //   self.toggleAddProperty();
+      // });
+      // this.addproperty_controls.appendChild(this.addproperty_button);
+      // this.addproperty_controls.appendChild(this.addproperty_holder);
+      // this.refreshAddProperties();
     }
 
     // Fix table cell ordering
