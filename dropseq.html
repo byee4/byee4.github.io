@@ -79,13 +79,8 @@
                 assay_protocol: {
                     type: "string",
                     enum: [
-                        "chemV1",
-                        "chemV2"
+                        "seqwell"
                     ]
-                },
-                aggr_run_id: {
-                    type: "string",
-                    default: "aggregated_01"
                 },
                 samples: {
                     type: "array",
@@ -101,13 +96,53 @@
                             sample_id: {
                                 type: "string"
                             },
-                            fastq_dir: {
+                            core_barcodes: {
+                                type: "integer"
+                            },
+                            expected_barcodes: {
+                                type: "integer"
+                            },
+                            read1: {
                                 type: "object",
-                                title: "Fastq directory",
+                                title: "Fastq Read 1 File",
                                 properties: {
                                     path: {
                                         type: "string",
-                                        default: "/path/to/fastq/directory",
+                                        default: "/path/to/fastq_read1",
+                                    },
+                                    class: {
+                                        type: "string",
+                                        enum: [
+                                          "File"
+                                        ]
+                                    }
+                                }
+                            },
+                            read2: {
+                                type: "object",
+                                title: "Fastq Read 2 File",
+                                properties: {
+                                    path: {
+                                        type: "string",
+                                        default: "/path/to/fastq_read2",
+                                    },
+                                    class: {
+                                        type: "string",
+                                        enum: [
+                                          "File"
+                                        ]
+                                    }
+                                }
+                            },
+                            species_genome_dir: {
+                                type: "object",
+                                title: "STAR index",
+                                properties: {
+                                    path: {
+                                        type: "string",
+                                        enum: [
+                                          "hg19_star"
+                                        ]
                                     },
                                     class: {
                                         type: "string",
@@ -117,36 +152,55 @@
                                     }
                                 }
                             },
-                            transcriptome: {
+                            species_reference_fasta: {
                                 type: "object",
-                                title: "Transcriptome directory",
+                                title: "Reference fasta",
                                 properties: {
                                     path: {
                                         type: "string",
                                         enum: [
-                                          "refdata-cellranger-hg19-1.2.0",
-                                          "refdata-cellranger-ercc92-1.2.0",
-                                          "refdata-cellranger-GRCh38-1.2.0",
-                                          "refdata-cellranger-mm10-1.2.0",
-                                          "refdata-cellranger-hg19_and_mm10-1.2.0"
+                                          "hg19.fasta"
                                         ]
                                     },
                                     class: {
                                         type: "string",
                                         enum: [
-                                          "Directory"
+                                          "File"
                                         ]
                                     }
                                 }
-                            }
+                            },
+                            species_reference_refFlat: {
+                                type: "object",
+                                title: "refFlat file",
+                                properties: {
+                                    path: {
+                                        type: "string",
+                                        enum: [
+                                          "hg19.refFlat"
+                                        ]
+                                    },
+                                    class: {
+                                        type: "string",
+                                        enum: [
+                                          "File"
+                                        ]
+                                    }
+                                }
+                            },
                         }
                     },
                     default: [
                         {
                             run_id: "run_01",
                             sample_id: "sample_01",
-                            fastq_dir: "fastq.gz",
-                            transcriptome: "refdata-cellranger-hg19-1.2.0",
+                            core_barcodes: 2000,
+                            expected_barcodes: 2000,
+                            read1: "fastq_R1.gz",
+                            read2: "fastq_R2.gz",
+                            species_genome_dir: "hg19_star",
+                            species_reference_fasta: "hg19.fasta",
+                            species_reference_refFlat: "hg19.refFlat"
                         }
                     ]
                 }
@@ -201,7 +255,7 @@
         jsoneditor.on('change',function() {
             var json = jsoneditor.getValue();
 
-            $output.value = "#!/usr/bin/env cellranger-runner\n" + JSON.stringify(json,null,2);
+            $output.value = "#!/usr/bin/env dropseq-runner\n" + JSON.stringify(json,null,2);
 
             var validation_errors = jsoneditor.validate();
             // Show validation errors if there are any
