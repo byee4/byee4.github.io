@@ -28,15 +28,15 @@
     <div class='row'>
         <div class='span8 col-md-8 columns eight large-8'>
             <h2>Dropseq tools 1.13 CWL (all users)</h2>
-            <p>1. Please fill out the fields and copy/save the contents on the right to a file (yee_run01_20180418.json).</p>
-            <h4>For TSCC users:</h4>
-            <p>2. Place this file into a scratch folder, and make it executable (chmod +x yee_run01_20180418.json)</p>
-            <p>3. Load the dropseq module (module load dropseqtools)</p>
-            <p>4. Execute the workflow on TSCC: (./yee_run01_20180418.json)</p>
+            <p>1. Please fill out the fields and copy/save the contents on the right to a file (<b>yee_run01_20180418.json</b>).</p>
+            <h4>For Yeo/TSCC users:</h4>
+            <p>2. Load the dropseq module (<b>module load dropseqtools</b>)</p>
+            <p>3. Place this file into a scratch folder, and make it executable (<b>chmod +x yee_run01_20180418.json</b>)</p>
+            <p>4. Execute the workflow on TSCC: (<b>./yee_run01_20180418.json</b>)</p>
             <h4>For authenticated AWS users:</h4>
-            <p>2. Place the file into a registered AWS S3 bucket (I will specify this for you upon registration)</p>
-            <p>3. Check the logs (updated every 2 hours) inside the results AWS bucket for updates</p>
-            <p>4. Results will be downloadable in the results bucket when ready.</p>
+            <p>2. Upload the file (along with the raw fastq files) into the <b>raw data AWS bucket</b> (I will specify this for you upon registration)</p>
+            <p>3. Check the logs (updated every 2 hours) inside the <b>results AWS bucket</b> for updates</p>
+            <p>4. Results will be downloadable in the <b>results AWS bucket</b> when ready.</p>
             <div id='editor'></div>
         </div>
         <div class='span4 col-md-4 columns four large-4'>
@@ -92,7 +92,7 @@
                     type: "string",
                     default: "expt_01"
                 },
-                experiment_date: {
+                experiment_start_date: {
                     type: "string",
                     default: "2018-01-01"
                 },
@@ -132,19 +132,23 @@
                     title: "Samples",
                     items: {
                         type: "object",
-                        title: "sample",
+                        title: "Sample",
                         properties: {
                             run_id: {
-                                type: "string"
+                                type: "string",
+                                default: "run_01"
                             },
                             sample_id: {
-                                type: "string"
+                                type: "string",
+                                default: "sample_01"
                             },
                             core_barcodes: {
-                                type: "integer"
+                                type: "integer",
+                                default: 2000
                             },
                             expected_barcodes: {
-                                type: "integer"
+                                type: "integer",
+                                default: 2000
                             },
                             read1: {
                                 type: "object",
@@ -152,7 +156,7 @@
                                 properties: {
                                     path: {
                                         type: "string",
-                                        default: "/path/to/fastq_read1",
+                                        default: "fastq_R1.fastq.gz"
                                     },
                                     class: {
                                         type: "string",
@@ -168,7 +172,7 @@
                                 properties: {
                                     path: {
                                         type: "string",
-                                        default: "/path/to/fastq_read2",
+                                        default: "fastq_R2.fastq.gz"
                                     },
                                     class: {
                                         type: "string",
@@ -189,6 +193,7 @@
                                           "mm10_star/",
                                           "hg19mm10_star/"
                                         ],
+                                        default: "hg19_star/"
                                     },
                                     class: {
                                         type: "string",
@@ -209,6 +214,7 @@
                                           "mm10.fasta",
                                           "hg19_mm10_transgenes.fasta"
                                         ],
+                                        default: "hg19.fasta"
                                     },
                                     class: {
                                         type: "string",
@@ -229,6 +235,7 @@
                                           "mm10.refFlat",
                                           "hg19_mm10_transgenes.refFlat"
                                         ],
+                                        default: "hg19.refFlat"
                                     },
                                     class: {
                                         type: "string",
@@ -238,20 +245,29 @@
                                     }
                                 }
                             },
+                            characteristics: {
+                                type: "array",
+                                format: "grid",
+                                title: "Characteristics",
+
+                                items: {
+                                    title: "tag",
+                                    type: "object",
+                                    properties: {
+                                        name: {
+                                            type: "string",
+                                            default: ""
+                                        },
+                                        value: {
+                                            type: "string",
+                                            default: ""
+                                        }
+                                    }
+                                }
+                            },
                         }
                     },
                     default: [
-                        {
-                            run_id: "run_01",
-                            sample_id: "sample_01",
-                            core_barcodes: 2000,
-                            expected_barcodes: 2000,
-                            read1: "fastq_R1.gz",
-                            read2: "fastq_R2.gz",
-                            species_genome_dir: "hg19_star",
-                            species_reference_fasta: "hg19.fasta",
-                            species_reference_refFlat: "hg19.refFlat"
-                        }
                     ]
                 }
             }
