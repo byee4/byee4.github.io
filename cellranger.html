@@ -85,6 +85,10 @@
                     type: "string",
                     default: "Gene Yeo"
                 },
+                contact_email: {
+                    type: "string",
+                    default: "yeolab@ucsd.edu"
+                },
                 sequencing_center: {
                     type: "string",
                     default: "Sequencing core (ie. IGM)"
@@ -121,7 +125,7 @@
                     type: "string",
                     default: "Overall experimental protocol description"
                 },
-                aggr_expt_id: {
+                aggr_nickname: {
                     type: "string",
                     default: "aggregated_01"
                 },
@@ -142,11 +146,17 @@
                         type: "object",
                         title: "sample",
                         properties: {
-                            expt_id: {
-                                type: "string"
+                            library_nickname: {
+                                type: "string",
+                                default: "A unique run ID string: e.g. sample345"
+                            },
+                            library_prep: {
+                                type: "string",
+                                default: "PolyA select"
                             },
                             sample_id: {
-                                type: "string"
+                                type: "string",
+                                default: "Sample name as specified in the sample sheet supplied to cellranger mkfastq"
                             },
                             fastq_dir: {
                                 type: "object",
@@ -187,6 +197,43 @@
                                     }
                                 }
                             },
+                            instrument_model: {
+                                type: "string",
+                                default: "Illumina HiSeq 4000",
+                                enum: [
+                                    "Illumina Genome Analyzer",
+                                    "Illumina Genome Analyzer II",
+                                    "Illumina Genome Analyzer IIx",
+                                    "Illumina HiSeq 2000",
+                                    "Illumina HiSeq 1000",
+                                    "Illumina HiSeq 2500",
+                                    "Illumina HiSeq 4000",
+                                    "Illumina NextSeq 500",
+                                    "Illumina MiSeq",
+                                    "AB SOLiD System",
+                                    "AB SOLiD System 2.0",
+                                    "AB SOLiD System 3.0",
+                                    "AB SOLiD 4 System",
+                                    "AB SOLiD 4hq System",
+                                    "AB SOLiD PI System",
+                                    "AB 5500xl Genetic Analyzer",
+                                    "AB 5500 Genetic Analyzer",
+                                    "454 GS",
+                                    "454 GS 20",
+                                    "454 GS FLX",
+                                    "454 GS Junior",
+                                    "454 GS FLX Titanium",
+                                    "Helicos HeliScope",
+                                    "PacBio RS",
+                                    "PacBio RS II",
+                                    "Complete Genomics",
+                                    "Ion Torrent PGM"
+                                ]
+                            },
+                            read_length: {
+                                type: "string",
+                                default: "50"
+                            },
                             characteristics: {
                                 type: "array",
                                 format: "grid",
@@ -206,7 +253,7 @@
                                         }
                                     }
                                 }
-                            }
+                            },
                         }
                     },
                     default: [
