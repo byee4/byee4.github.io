@@ -25,11 +25,18 @@
 <div class='container'>
     <div class='row'>
         <div class='span8 col-md-8 columns eight large-8'>
-            <h2>Cellranger 2.1.1 CWL workflow</h2>
-            <p>1. Please fill out the fields and copy/save the contents on the right to a file (yee_run01_20180418.json).</p>
-            <p>2. Place this file into a scratch folder, and make it executable (chmod +x yee_run01_20180418.json)</p>
-            <p>3. Load the cellranger module (module load cellranger/2.1.1)</p>
-            <p>4. Execute the workflow on TSCC: (./yee_run01_20180418.json)</p>
+            <h2>Cellranger 2.1.1 CWL</h2>
+            <h4>Instructions (all users):</h4>
+            <p>1. Please fill out the fields and copy/save the contents on the right to a file (<b>yee_run01_20180418.json</b>).</p>
+            <h4>For Yeo/TSCC users:</h4>
+            <p>2. Load the dropseq module (<b>module load cellranger/2.1.1a</b>)</p>
+            <p>3. Place/upload this file into a scratch folder, and make it executable (<b>chmod +x yee_run01_20180418.json</b>)</p>
+            <p>4. Copy the selected reference data into working directory (found here: <b>$CELLRANGER_HOME/datasets</b>)</p>
+            <p>5. Execute the workflow on TSCC: (<b>./yee_run01_20180418.json</b>)</p>
+            <h4>For authenticated AWS users (coming soon):</h4>
+            <p>2. Place/upload the file (along with the raw fastq files) into the <b>raw data AWS bucket</b> (I will specify this for you upon registration)</p>
+            <p>3. Check the logs (updated every 2 hours) inside the <b>results AWS bucket</b> for updates</p>
+            <p>4. Results will be downloadable in the <b>results AWS bucket</b> when ready.</p>
             <div id='editor'></div>
         </div>
         <div class='span4 col-md-4 columns four large-4'>
@@ -74,20 +81,58 @@
                     type: "string",
                     default: "John Doe"
                 },
-                run_date: {
+                pi_name: {
                     type: "string",
-                    default: "2018-04-12"
+                    default: "Gene Yeo"
+                },
+                sequencing_center: {
+                    type: "string",
+                    default: "Sequencing core (ie. IGM)"
+                },
+                experiment_nickname: {
+                    type: "string",
+                    default: "expt_01"
+                },
+                experiment_start_date: {
+                    type: "string",
+                    default: "2018-01-01"
+                },
+                experiment_summary: {
+                    type: "string",
+                    default: "The `summary` section of a GEO submission template"
+                },
+                sequencing_date: {
+                    type: "string",
+                    default: "2018-01-01"
+                },
+                processing_date: {
+                    type: "string",
+                    default: "2018-01-01"
                 },
                 assay_protocol: {
                     type: "string",
                     enum: [
                         "chemV1",
                         "chemV2"
-                    ]
+                    ],
+                    default: "chemV2"
                 },
-                aggr_run_id: {
+                protocol_description: {
+                    type: "string",
+                    default: "Overall experimental protocol description"
+                },
+                aggr_expt_id: {
                     type: "string",
                     default: "aggregated_01"
+                },
+                organism: {
+                    type: "string",
+                    enum: [
+                        "Human (HSA)",
+                        "Mouse (MMU)",
+                        "Rat (RNO)",
+                        "Barnyard (HSA+MMU)"
+                    ]
                 },
                 samples: {
                     type: "array",
@@ -97,7 +142,7 @@
                         type: "object",
                         title: "sample",
                         properties: {
-                            run_id: {
+                            expt_id: {
                                 type: "string"
                             },
                             sample_id: {
@@ -131,7 +176,8 @@
                                           "refdata-cellranger-GRCh38-1.2.0",
                                           "refdata-cellranger-mm10-1.2.0",
                                           "refdata-cellranger-hg19_and_mm10-1.2.0"
-                                        ]
+                                        ],
+                                        default: "refdata-cellranger-hg19-1.2.0"
                                     },
                                     class: {
                                         type: "string",
@@ -140,16 +186,30 @@
                                         ]
                                     }
                                 }
+                            },
+                            characteristics: {
+                                type: "array",
+                                format: "grid",
+                                title: "Characteristics",
+
+                                items: {
+                                    title: "tag",
+                                    type: "object",
+                                    properties: {
+                                        name: {
+                                            type: "string",
+                                            default: "Tag (ie. cell type)"
+                                        },
+                                        value: {
+                                            type: "string",
+                                            default: "Tag value (ie. ES-derived neural progenitor cells)"
+                                        }
+                                    }
+                                }
                             }
                         }
                     },
                     default: [
-                        {
-                            run_id: "run_01",
-                            sample_id: "sample_01",
-                            fastq_dir: "fastq.gz",
-                            transcriptome: "refdata-cellranger-hg19-1.2.0",
-                        }
                     ]
                 }
             }
