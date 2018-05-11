@@ -148,7 +148,7 @@
                         properties: {
                             library_nickname: {
                                 type: "string",
-                                default: "A unique run ID string: e.g. sample345"
+                                default: "sample_01"
                             },
                             library_prep: {
                                 type: "string",
@@ -231,12 +231,16 @@
                                 ]
                             },
                             read1_length: {
-                                type: "string",
-                                default: "28"
+                                type: "number",
+                                default: 26
                             },
                             read2_length: {
-                                type: "string",
-                                default: "98"
+                                type: "number",
+                                default: 98
+                            },
+                            expect_cells: {
+                                type: "number",
+                                default: 3000
                             },
                             characteristics: {
                                 type: "array",
