@@ -77,21 +77,30 @@
             title: "Samples",
             type: "object",
             properties: {
-                investigator: {
+                aggr_nickname: {
                     type: "string",
-                    default: "John Doe"
+                    default: "aggregated_01"
                 },
-                pi_name: {
+                aggr_norm_method: {
                     type: "string",
-                    default: "Gene Yeo"
+                    default: "mapped",
+                    enum: [
+                        "mapped",
+                        "raw",
+                        "none"
+                    ]
+                },
+                assay_protocol: {
+                    type: "string",
+                    enum: [
+                        "chemV1",
+                        "chemV2"
+                    ],
+                    default: "chemV2"
                 },
                 contact_email: {
                     type: "string",
-                    default: "yeolab@ucsd.edu"
-                },
-                sequencing_center: {
-                    type: "string",
-                    default: "Sequencing core (ie. IGM)"
+                    default: ""
                 },
                 experiment_nickname: {
                     type: "string",
@@ -105,29 +114,25 @@
                     type: "string",
                     default: "The `summary` section of a GEO submission template"
                 },
-                sequencing_date: {
+                extract_protocol_description: {
                     type: "string",
-                    default: "2018-01-01"
+                    default: ""
                 },
-                processing_date: {
+                growth_protocol_description: {
                     type: "string",
-                    default: "2018-01-01"
+                    default: ""
                 },
-                assay_protocol: {
+                investigator: {
                     type: "string",
-                    enum: [
-                        "chemV1",
-                        "chemV2"
-                    ],
-                    default: "chemV2"
+                    default: ""
                 },
-                protocol_description: {
+                library_construction_protocol: {
                     type: "string",
-                    default: "Overall experimental protocol description"
+                    default: ""
                 },
-                aggr_nickname: {
+                library_strategy: {
                     type: "string",
-                    default: "aggregated_01"
+                    default: ""
                 },
                 organism: {
                     type: "string",
@@ -135,8 +140,29 @@
                         "Human (HSA)",
                         "Mouse (MMU)",
                         "Rat (RNO)",
+                        "C. elegans (CEL)",
                         "Barnyard (HSA+MMU)"
                     ]
+                },
+                pi_name: {
+                    type: "string",
+                    default: ""
+                },
+                processing_date: {
+                    type: "string",
+                    default: "2018-01-01"
+                },
+                sequencing_center: {
+                    type: "string",
+                    default: ""
+                },
+                sequencing_date: {
+                    type: "string",
+                    default: "2018-01-01"
+                },
+                treatment_protocol_description: {
+                    type: "string",
+                    default: ""
                 },
                 samples: {
                     type: "array",
