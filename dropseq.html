@@ -27,14 +27,16 @@
 <div class='container'>
     <div class='row'>
         <div class='span8 col-md-8 columns eight large-8'>
-            <h2>Dropseq tools 1.13 CWL (all users)</h2>
+            <h2>Dropseq tools 1.13 CWL</h2>
+            <h4>Instructions (all users):</h4>
             <p>1. Please fill out the fields and copy/save the contents on the right to a file (<b>yee_run01_20180418.json</b>).</p>
             <h4>For Yeo/TSCC users:</h4>
             <p>2. Load the dropseq module (<b>module load dropseqtools</b>)</p>
-            <p>3. Place this file into a scratch folder, and make it executable (<b>chmod +x yee_run01_20180418.json</b>)</p>
-            <p>4. Execute the workflow on TSCC: (<b>./yee_run01_20180418.json</b>)</p>
+            <p>3. Place/upload this file into a scratch folder, and make it executable (<b>chmod +x yee_run01_20180418.json</b>)</p>
+            <p>4. Copy the selected reference data into working directory (found here: <b>$DROPSEQTOOLS_HOME/datasets</b>)</p>
+            <p>5. Execute the workflow on TSCC: (<b>./yee_run01_20180418.json</b>)</p>
             <h4>For authenticated AWS users:</h4>
-            <p>2. Upload the file (along with the raw fastq files) into the <b>raw data AWS bucket</b> (I will specify this for you upon registration)</p>
+            <p>2. Place/upload the file (along with the raw fastq files) into the <b>raw data AWS bucket</b> (I will specify this for you upon registration)</p>
             <p>3. Check the logs (updated every 2 hours) inside the <b>results AWS bucket</b> for updates</p>
             <p>4. Results will be downloadable in the <b>results AWS bucket</b> when ready.</p>
             <div id='editor'></div>
@@ -77,16 +79,15 @@
             title: "Samples",
             type: "object",
             properties: {
-                investigator: {
+                assay_protocol: {
                     type: "string",
-                    default: "John Doe"
+                    enum: [
+                        "SeqWell"
+                    ]
                 },
-                pi_name: {
+                contact_email: {
                     type: "string",
-                    default: "Gene Yeo"
-                },
-                sequencing_center: {
-                    type: "string"
+                    default: ""
                 },
                 experiment_nickname: {
                     type: "string",
@@ -100,21 +101,23 @@
                     type: "string",
                     default: ""
                 },
-                sequencing_date: {
+                extract_protocol_description: {
                     type: "string",
-                    default: "2018-01-01"
+                    default: ""
                 },
-                processing_date: {
+                growth_protocol_description: {
                     type: "string",
-                    default: "2018-01-01"
+                    default: ""
                 },
-                assay_protocol: {
+                investigator: {
                     type: "string",
-                    enum: [
-                        "seqwell"
-                    ]
+                    default: "John Doe"
                 },
-                protocol_description: {
+                library_construction_protocol: {
+                    type: "string",
+                    default: ""
+                },
+                library_strategy: {
                     type: "string",
                     default: ""
                 },
@@ -124,7 +127,28 @@
                         "Human (HSA)",
                         "Mouse (MMU)",
                         "Rat (RNO)",
+                        "C. elegans (CEL)",
+                        "Barnyard (HSA+MMU)"
                     ]
+                },
+                pi_name: {
+                    type: "string",
+                    default: "Gene Yeo"
+                },
+                processing_date: {
+                    type: "string",
+                    default: "2018-01-01"
+                },
+                sequencing_center: {
+                    type: "string"
+                },
+                sequencing_date: {
+                    type: "string",
+                    default: "2018-01-01"
+                },
+                treatment_protocol_description: {
+                    type: "string",
+                    default: ""
                 },
                 samples: {
                     type: "array",
@@ -138,18 +162,16 @@
                                 type: "string",
                                 default: "run_01"
                             },
+                            library_prep: {
+                                type: "string",
+                                default: "PolyA select"
+                            },
                             sample_id: {
                                 type: "string",
                                 default: "sample_01"
                             },
-                            core_barcodes: {
-                                type: "integer",
-                                default: 2000
-                            },
-                            expected_barcodes: {
-                                type: "integer",
-                                default: 2000
-                            },
+
+
                             read1: {
                                 type: "object",
                                 title: "Fastq Read 1 File",
@@ -166,6 +188,10 @@
                                     }
                                 }
                             },
+                            read1_length: {
+                                type: "number",
+                                default: 26
+                            },
                             read2: {
                                 type: "object",
                                 title: "Fastq Read 2 File",
@@ -181,6 +207,51 @@
                                         ]
                                     }
                                 }
+                            },
+                            read2_length: {
+                                type: "number",
+                                default: 98
+                            },
+                            instrument_model: {
+                                type: "string",
+                                default: "Illumina HiSeq 4000",
+                                enum: [
+                                    "Illumina Genome Analyzer",
+                                    "Illumina Genome Analyzer II",
+                                    "Illumina Genome Analyzer IIx",
+                                    "Illumina HiSeq 2000",
+                                    "Illumina HiSeq 1000",
+                                    "Illumina HiSeq 2500",
+                                    "Illumina HiSeq 4000",
+                                    "Illumina NextSeq 500",
+                                    "Illumina MiSeq",
+                                    "AB SOLiD System",
+                                    "AB SOLiD System 2.0",
+                                    "AB SOLiD System 3.0",
+                                    "AB SOLiD 4 System",
+                                    "AB SOLiD 4hq System",
+                                    "AB SOLiD PI System",
+                                    "AB 5500xl Genetic Analyzer",
+                                    "AB 5500 Genetic Analyzer",
+                                    "454 GS",
+                                    "454 GS 20",
+                                    "454 GS FLX",
+                                    "454 GS Junior",
+                                    "454 GS FLX Titanium",
+                                    "Helicos HeliScope",
+                                    "PacBio RS",
+                                    "PacBio RS II",
+                                    "Complete Genomics",
+                                    "Ion Torrent PGM"
+                                ]
+                            },
+                            core_barcodes: {
+                                type: "integer",
+                                default: 2000
+                            },
+                            expected_barcodes: {
+                                type: "integer",
+                                default: 2000
                             },
                             species_genome_dir: {
                                 type: "object",
