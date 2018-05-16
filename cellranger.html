@@ -112,7 +112,7 @@
                 },
                 experiment_summary: {
                     type: "string",
-                    default: "The `summary` section of a GEO submission template"
+                    default: ""
                 },
                 extract_protocol_description: {
                     type: "string",
@@ -164,6 +164,29 @@
                     type: "string",
                     default: ""
                 },
+                transcriptome: {
+                    type: "object",
+                    title: "Transcriptome directory",
+                    properties: {
+                        path: {
+                            type: "string",
+                            enum: [
+                              "refdata-cellranger-hg19-1.2.0",
+                              "refdata-cellranger-ercc92-1.2.0",
+                              "refdata-cellranger-GRCh38-1.2.0",
+                              "refdata-cellranger-mm10-1.2.0",
+                              "refdata-cellranger-hg19_and_mm10-1.2.0"
+                            ],
+                            default: "refdata-cellranger-hg19-1.2.0"
+                        },
+                        class: {
+                            type: "string",
+                            enum: [
+                              "Directory"
+                            ]
+                        }
+                    }
+                },
                 samples: {
                     type: "array",
                     format: "grid",
@@ -182,7 +205,7 @@
                             },
                             sample_id: {
                                 type: "string",
-                                default: "Sample name as specified in the sample sheet supplied to cellranger mkfastq"
+                                default: "sample_prefix"
                             },
                             fastq_dir: {
                                 type: "object",
@@ -191,29 +214,6 @@
                                     path: {
                                         type: "string",
                                         default: "/path/to/fastq/directory",
-                                    },
-                                    class: {
-                                        type: "string",
-                                        enum: [
-                                          "Directory"
-                                        ]
-                                    }
-                                }
-                            },
-                            transcriptome: {
-                                type: "object",
-                                title: "Transcriptome directory",
-                                properties: {
-                                    path: {
-                                        type: "string",
-                                        enum: [
-                                          "refdata-cellranger-hg19-1.2.0",
-                                          "refdata-cellranger-ercc92-1.2.0",
-                                          "refdata-cellranger-GRCh38-1.2.0",
-                                          "refdata-cellranger-mm10-1.2.0",
-                                          "refdata-cellranger-hg19_and_mm10-1.2.0"
-                                        ],
-                                        default: "refdata-cellranger-hg19-1.2.0"
                                     },
                                     class: {
                                         type: "string",
