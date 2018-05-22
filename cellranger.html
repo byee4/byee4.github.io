@@ -24,10 +24,10 @@
 <body>
 <div class='container'>
     <div class='row'>
-        <div class='span8 col-md-8 columns eight large-8'>
+        <div class='span8 col-md-12 columns twelve large-12'>
             <h2>Cellranger 2.1.1 CWL</h2>
             <h4>Instructions (all users):</h4>
-            <p>1. Please fill out the fields and copy/save the contents on the right to a file (<b>yee_run01_20180418.json</b>).</p>
+            <p>1. Please fill out the fields and copy/save the contents below the form to a file (<b>yee_run01_20180418.json</b>). Most of these fields and their descriptions are based on the <a href="https://www.ncbi.nlm.nih.gov/geo/info/examples/seq_template_v2.1.xls">GEO submission template</a>. <b>Make sure the extension is .json!</b></p>
             <h4>For Yeo/TSCC users:</h4>
             <p>2. Load the dropseq module (<b>module load cellranger/2.1.1a</b>)</p>
             <p>3. Place/upload this file into a scratch folder, and make it executable (<b>chmod +x yee_run01_20180418.json</b>)</p>
@@ -39,7 +39,7 @@
             <p>4. Results will be downloadable in the <b>results AWS bucket</b> when ready.</p>
             <div id='editor'></div>
         </div>
-        <div class='span4 col-md-4 columns four large-4'>
+        <div class='span12 col-md-12 columns twelve large-12'>
             <div>
                 <a href='#' id='direct_link'>Direct Link</a> (preserves schema, value, and options)
             </div>
@@ -79,7 +79,8 @@
             properties: {
                 aggr_nickname: {
                     type: "string",
-                    default: "aggregated_01"
+                    default: "aggregated_01",
+                    description: "The eventual output directory for the aggregated output (if multisample expt)."
                 },
                 aggr_norm_method: {
                     type: "string",
@@ -88,7 +89,8 @@
                         "mapped",
                         "raw",
                         "none"
-                    ]
+                    ],
+                    description: "See official documentation (<a href='https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/aggregate'>Depth Normalization</a>)"
                 },
                 assay_protocol: {
                     type: "string",
@@ -96,43 +98,53 @@
                         "chemV1",
                         "chemV2"
                     ],
-                    default: "chemV2"
+                    default: "chemV2",
+                    description: "Describe the chemistry version."
                 },
                 contact_email: {
                     type: "string",
-                    default: ""
+                    default: "",
+                    description: "Describe point of contact for additional experimental details."
                 },
                 experiment_nickname: {
                     type: "string",
-                    default: "expt_01"
+                    default: "expt_01",
+                    description: "Short, unique nickname that can be used to reference this experiment."
                 },
                 experiment_start_date: {
                     type: "string",
-                    default: "2018-01-01"
+                    default: "2018-01-01",
+                    description: "Describe when this experiment was started (YYYY-MM-DD)."
                 },
                 experiment_summary: {
                     type: "string",
-                    default: ""
+                    default: "",
+                    description: "Thorough description of the goals and objectives of this study. The abstract from the associated publication may be suitable. Include as much text as necessary."
                 },
                 extract_protocol_description: {
                     type: "string",
-                    default: ""
+                    default: "",
+                    description: "Describe the protocols used to extract and prepare the material to be sequenced."
                 },
                 growth_protocol_description: {
                     type: "string",
-                    default: ""
+                    default: "",
+                    description: "Optional. Describe the conditions that were used to grow/maintain organisms or cells prior to extract preperation."
                 },
                 investigator: {
                     type: "string",
-                    default: ""
+                    default: "",
+                    description: "Main investigator responsible for this data."
                 },
                 library_construction_protocol: {
                     type: "string",
-                    default: ""
+                    default: "10X Chromium chemistry V2",
+                    description: "Describe the library construction protocol."
                 },
                 library_strategy: {
                     type: "string",
-                    default: ""
+                    default: "scRNA-Seq",
+                    description: "Leave as scRNA-Seq."
                 },
                 organism: {
                     type: "string",
@@ -142,27 +154,33 @@
                         "Rat (RNO)",
                         "C. elegans (CEL)",
                         "Barnyard (HSA+MMU)"
-                    ]
+                    ],
+                    description: "Intended organism of interest. Usually this corresponds to the reference genome specified below."
                 },
                 pi_name: {
                     type: "string",
-                    default: ""
+                    default: "",
+                    description: "Usually PI or corresponding author."
                 },
                 processing_date: {
                     type: "string",
-                    default: "2018-01-01"
+                    default: "2018-01-01",
+                    description: "Describe when this experiment was processed, typically the current date (YYYY-MM-DD)."
                 },
                 sequencing_center: {
                     type: "string",
-                    default: ""
+                    default: "",
+                    description: "Name and secondary identifier (address or phone #) of the sequencing center or core (ie. IGM, 858-822-2754)."
                 },
                 sequencing_date: {
                     type: "string",
-                    default: "2018-01-01"
+                    default: "2018-01-01",
+                    description: "Describe when this experiment came back from the sequencer (YYYY-MM-DD)."
                 },
                 treatment_protocol_description: {
                     type: "string",
-                    default: ""
+                    default: "",
+                    description: "Optional. Describe the treatments applied to the biological material prior to extract preparation."
                 },
                 transcriptome: {
                     type: "object",
@@ -183,7 +201,8 @@
                             type: "string",
                             enum: [
                               "Directory"
-                            ]
+                            ],
+                            description: "Leave as 'Directory'"
                         }
                     }
                 },
@@ -197,15 +216,18 @@
                         properties: {
                             library_nickname: {
                                 type: "string",
-                                default: "sample_01"
+                                default: "sample_01",
+                                description: "The eventual output directory for this single sample."
                             },
                             library_prep: {
                                 type: "string",
-                                default: "PolyA select"
+                                default: "PolyA select",
+                                description: "Leave as is, unless there is an exception."
                             },
                             sample_id: {
                                 type: "string",
-                                default: "sample_prefix"
+                                default: "sample_prefix",
+                                description: "See official documentation (<a href='https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/fastq-input'>--sample parameter</a>)"
                             },
                             fastq_dir: {
                                 type: "object",
@@ -213,15 +235,18 @@
                                 properties: {
                                     path: {
                                         type: "string",
-                                        default: "/path/to/fastq/directory",
+                                        default: "path_to_fastq_directory",
+                                        description: "Base directory containing your fastq files. See official documentation (<a href='https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/fastq-input'>--fastqs</a>). You will upload this directory to the specified AWS bucket."
                                     },
                                     class: {
                                         type: "string",
                                         enum: [
                                           "Directory"
-                                        ]
+                                        ],
+                                        description: "Leave as 'Directory'"
                                     }
-                                }
+                                },
+                                description: "Name of the directory you are uploading to AWS or copying to TSCC. Typically this is the "
                             },
                             instrument_model: {
                                 type: "string",
@@ -266,13 +291,14 @@
                             },
                             expect_cells: {
                                 type: "number",
-                                default: 3000
+                                default: 3000,
+                                description: "Expected number of recovered cells. By default, 10X cellranger uses 3000."
                             },
                             characteristics: {
                                 type: "array",
                                 format: "grid",
                                 title: "Characteristics",
-
+                                description: "Replace 'tag' with a biosource characteristic (e.g. strain, tissue, developmental stage, tumor stage, etc), and then enter the value for each sample beneath (e.g. 129SV, brain, embryo, etc). You may add multiple characteristics columns to this template (see 'Metadata Example' spreadsheet).",
                                 items: {
                                     title: "tag",
                                     type: "object",
