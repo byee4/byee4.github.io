@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>JSON Editor Example</title>
+
+    <!-- placeholders for the theme switcher -->
+    <link rel='stylesheet' id='theme_stylesheet'>
+    <link rel='stylesheet' id='icon_stylesheet'>
+
+    <style>[class*="foundicon-"] {font-family: GeneralFoundicons;font-style: normal;}</style>
+    <script src='dist/jsoneditor.js'></script>
+
+    <script>
+    /**
+     * LZString compression library
+     * Used to create direct links to the demo.
+     * NOT REQUIRED for JSON Editor.
+     * https://github.com/pieroxy/lz-string
+     */
+    var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",_f:String.fromCharCode,compressToBase64:function(e){if(e==null)return"";var t="";var n,r,i,s,o,u,a;var f=0;e=LZString.compress(e);while(f<e.length*2){if(f%2==0){n=e.charCodeAt(f/2)>>8;r=e.charCodeAt(f/2)&255;if(f/2+1<e.length)i=e.charCodeAt(f/2+1)>>8;else i=NaN}else{n=e.charCodeAt((f-1)/2)&255;if((f+1)/2<e.length){r=e.charCodeAt((f+1)/2)>>8;i=e.charCodeAt((f+1)/2)&255}else r=i=NaN}f+=3;s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+LZString._keyStr.charAt(s)+LZString._keyStr.charAt(o)+LZString._keyStr.charAt(u)+LZString._keyStr.charAt(a)}return t},decompressFromBase64:function(e){if(e==null)return"";var t="",n=0,r,i,s,o,u,a,f,l,c=0,h=LZString._f;e=e.replace(/[^A-Za-z0-9\+\/\=]/g,"");while(c<e.length){u=LZString._keyStr.indexOf(e.charAt(c++));a=LZString._keyStr.indexOf(e.charAt(c++));f=LZString._keyStr.indexOf(e.charAt(c++));l=LZString._keyStr.indexOf(e.charAt(c++));i=u<<2|a>>4;s=(a&15)<<4|f>>2;o=(f&3)<<6|l;if(n%2==0){r=i<<8;if(f!=64){t+=h(r|s)}if(l!=64){r=o<<8}}else{t=t+h(r|i);if(f!=64){r=s<<8}if(l!=64){t+=h(r|o)}}n+=3}return LZString.decompress(t)},compressToUTF16:function(e){if(e==null)return"";var t="",n,r,i,s=0,o=LZString._f;e=LZString.compress(e);for(n=0;n<e.length;n++){r=e.charCodeAt(n);switch(s++){case 0:t+=o((r>>1)+32);i=(r&1)<<14;break;case 1:t+=o(i+(r>>2)+32);i=(r&3)<<13;break;case 2:t+=o(i+(r>>3)+32);i=(r&7)<<12;break;case 3:t+=o(i+(r>>4)+32);i=(r&15)<<11;break;case 4:t+=o(i+(r>>5)+32);i=(r&31)<<10;break;case 5:t+=o(i+(r>>6)+32);i=(r&63)<<9;break;case 6:t+=o(i+(r>>7)+32);i=(r&127)<<8;break;case 7:t+=o(i+(r>>8)+32);i=(r&255)<<7;break;case 8:t+=o(i+(r>>9)+32);i=(r&511)<<6;break;case 9:t+=o(i+(r>>10)+32);i=(r&1023)<<5;break;case 10:t+=o(i+(r>>11)+32);i=(r&2047)<<4;break;case 11:t+=o(i+(r>>12)+32);i=(r&4095)<<3;break;case 12:t+=o(i+(r>>13)+32);i=(r&8191)<<2;break;case 13:t+=o(i+(r>>14)+32);i=(r&16383)<<1;break;case 14:t+=o(i+(r>>15)+32,(r&32767)+32);s=0;break}}return t+o(i+32)},decompressFromUTF16:function(e){if(e==null)return"";var t="",n,r,i=0,s=0,o=LZString._f;while(s<e.length){r=e.charCodeAt(s)-32;switch(i++){case 0:n=r<<1;break;case 1:t+=o(n|r>>14);n=(r&16383)<<2;break;case 2:t+=o(n|r>>13);n=(r&8191)<<3;break;case 3:t+=o(n|r>>12);n=(r&4095)<<4;break;case 4:t+=o(n|r>>11);n=(r&2047)<<5;break;case 5:t+=o(n|r>>10);n=(r&1023)<<6;break;case 6:t+=o(n|r>>9);n=(r&511)<<7;break;case 7:t+=o(n|r>>8);n=(r&255)<<8;break;case 8:t+=o(n|r>>7);n=(r&127)<<9;break;case 9:t+=o(n|r>>6);n=(r&63)<<10;break;case 10:t+=o(n|r>>5);n=(r&31)<<11;break;case 11:t+=o(n|r>>4);n=(r&15)<<12;break;case 12:t+=o(n|r>>3);n=(r&7)<<13;break;case 13:t+=o(n|r>>2);n=(r&3)<<14;break;case 14:t+=o(n|r>>1);n=(r&1)<<15;break;case 15:t+=o(n|r);i=0;break}s++}return LZString.decompress(t)},compressToUint8Array:function(e){var t=LZString.compress(e);var n=new Uint8Array(t.length*2);for(var r=0,i=t.length;r<i;r++){var s=t.charCodeAt(r);n[r*2]=s>>>8;n[r*2+1]=s%256}return n},decompressFromUint8Array:function(e){if(e===null||e===undefined){return LZString.decompress(e)}else{var t=new Array(e.length/2);for(var n=0,r=t.length;n<r;n++){t[n]=e[n*2]*256+e[n*2+1]}return LZString.decompress(String.fromCharCode.apply(null,t))}},compressToEncodedURIComponent:function(e){return LZString.compressToBase64(e).replace(/=/g,"$").replace(/\//g,"-")},decompressFromEncodedURIComponent:function(e){if(e)e=e.replace(/$/g,"=").replace(/-/g,"/");return LZString.decompressFromBase64(e)},compress:function(e){if(e==null)return"";var t,n,r={},i={},s="",o="",u="",a=2,f=3,l=2,c="",h=0,p=0,d,v=LZString._f;for(d=0;d<e.length;d+=1){s=e.charAt(d);if(!Object.prototype.hasOwnProperty.call(r,s)){r[s]=f++;i[s]=true}o=u+s;if(Object.prototype.hasOwnProperty.call(r,o)){u=o}else{if(Object.prototype.hasOwnProperty.call(i,u)){if(u.charCodeAt(0)<256){for(t=0;t<l;t++){h=h<<1;if(p==15){p=0;c+=v(h);h=0}else{p++}}n=u.charCodeAt(0);for(t=0;t<8;t++){h=h<<1|n&1;if(p==15){p=0;c+=v(h);h=0}else{p++}n=n>>1}}else{n=1;for(t=0;t<l;t++){h=h<<1|n;if(p==15){p=0;c+=v(h);h=0}else{p++}n=0}n=u.charCodeAt(0);for(t=0;t<16;t++){h=h<<1|n&1;if(p==15){p=0;c+=v(h);h=0}else{p++}n=n>>1}}a--;if(a==0){a=Math.pow(2,l);l++}delete i[u]}else{n=r[u];for(t=0;t<l;t++){h=h<<1|n&1;if(p==15){p=0;c+=v(h);h=0}else{p++}n=n>>1}}a--;if(a==0){a=Math.pow(2,l);l++}r[o]=f++;u=String(s)}}if(u!==""){if(Object.prototype.hasOwnProperty.call(i,u)){if(u.charCodeAt(0)<256){for(t=0;t<l;t++){h=h<<1;if(p==15){p=0;c+=v(h);h=0}else{p++}}n=u.charCodeAt(0);for(t=0;t<8;t++){h=h<<1|n&1;if(p==15){p=0;c+=v(h);h=0}else{p++}n=n>>1}}else{n=1;for(t=0;t<l;t++){h=h<<1|n;if(p==15){p=0;c+=v(h);h=0}else{p++}n=0}n=u.charCodeAt(0);for(t=0;t<16;t++){h=h<<1|n&1;if(p==15){p=0;c+=v(h);h=0}else{p++}n=n>>1}}a--;if(a==0){a=Math.pow(2,l);l++}delete i[u]}else{n=r[u];for(t=0;t<l;t++){h=h<<1|n&1;if(p==15){p=0;c+=v(h);h=0}else{p++}n=n>>1}}a--;if(a==0){a=Math.pow(2,l);l++}}n=2;for(t=0;t<l;t++){h=h<<1|n&1;if(p==15){p=0;c+=v(h);h=0}else{p++}n=n>>1}while(true){h=h<<1;if(p==15){c+=v(h);break}else p++}return c},decompress:function(e){if(e==null)return"";if(e=="")return null;var t=[],n,r=4,i=4,s=3,o="",u="",a,f,l,c,h,p,d,v=LZString._f,m={string:e,val:e.charCodeAt(0),position:32768,index:1};for(a=0;a<3;a+=1){t[a]=a}l=0;h=Math.pow(2,2);p=1;while(p!=h){c=m.val&m.position;m.position>>=1;if(m.position==0){m.position=32768;m.val=m.string.charCodeAt(m.index++)}l|=(c>0?1:0)*p;p<<=1}switch(n=l){case 0:l=0;h=Math.pow(2,8);p=1;while(p!=h){c=m.val&m.position;m.position>>=1;if(m.position==0){m.position=32768;m.val=m.string.charCodeAt(m.index++)}l|=(c>0?1:0)*p;p<<=1}d=v(l);break;case 1:l=0;h=Math.pow(2,16);p=1;while(p!=h){c=m.val&m.position;m.position>>=1;if(m.position==0){m.position=32768;m.val=m.string.charCodeAt(m.index++)}l|=(c>0?1:0)*p;p<<=1}d=v(l);break;case 2:return""}t[3]=d;f=u=d;while(true){if(m.index>m.string.length){return""}l=0;h=Math.pow(2,s);p=1;while(p!=h){c=m.val&m.position;m.position>>=1;if(m.position==0){m.position=32768;m.val=m.string.charCodeAt(m.index++)}l|=(c>0?1:0)*p;p<<=1}switch(d=l){case 0:l=0;h=Math.pow(2,8);p=1;while(p!=h){c=m.val&m.position;m.position>>=1;if(m.position==0){m.position=32768;m.val=m.string.charCodeAt(m.index++)}l|=(c>0?1:0)*p;p<<=1}t[i++]=v(l);d=i-1;r--;break;case 1:l=0;h=Math.pow(2,16);p=1;while(p!=h){c=m.val&m.position;m.position>>=1;if(m.position==0){m.position=32768;m.val=m.string.charCodeAt(m.index++)}l|=(c>0?1:0)*p;p<<=1}t[i++]=v(l);d=i-1;r--;break;case 2:return u}if(r==0){r=Math.pow(2,s);s++}if(t[d]){o=t[d]}else{if(d===i){o=f+f.charAt(0)}else{return null}}u+=o;t[i++]=f+o.charAt(0);r--;f=o;if(r==0){r=Math.pow(2,s);s++}}}};if(typeof module!=="undefined"&&module!=null){module.exports=LZString}
+    </script>
+    <style>
+    body {font-family: Arial;}
+
+    /* Style the tab */
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+    /* Style the buttons inside the tab */
+    .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        font-size: 17px;
+    }
+
+    /* Change background color of buttons on hover */
+    .tab button:hover {
+        background-color: #ddd;
+    }
+
+    /* Create an active/current tablink class */
+    .tab button.active {
+        background-color: #ccc;
+    }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+    </style>
+
+</head>
+<body>
+<div class="tab">
+  <button class="tablinks" onclick="openPipeline(event, 'Cellranger')">Cellranger</button>
+  <button class="tablinks" onclick="openPipeline(event, 'DropseqTools')">Dropseqtools</button>
+  <button class="tablinks" onclick="openPipeline(event, 'Imaging')">Imaging</button>
+</div>
+
+<div id="Cellranger" class="tabcontent">
+  <div class='container'>
+    <div class='row'>
+        <div class='span8 col-md-12 columns twelve large-12'>
+            <h2>Cellranger 2.1.1 CWL</h2>
+            <h4>Instructions (coming soon):</h4>
+            <p>1. Please fill out the fields and copy/save the contents below the form to a file (<b>yee_run01_20180418.json</b>). Most of these fields and their descriptions are based on the <a href="https://www.ncbi.nlm.nih.gov/geo/info/examples/seq_template_v2.1.xls">GEO submission template</a>. <b>Make sure the extension is .json!</b></p>
+        <div id='cellranger-editor'></div>
+        </div>
+        <div class='span12 col-md-12 columns twelve large-12'>
+            <div>
+                <a href='#' id='direct_link'>Direct Link</a> (preserves schema, value, and options)
+            </div>
+            <h2>JSON Output</h2>
+            <p>Copy this file into a test document. You can also make changes to the JSON here and set the value in the editor by clicking <button class='btn btn-primary' id='setvalue'>Update Form</button></p>
+            <textarea id='cellranger-output' style='height: 800px;' class='form-control'></textarea>
+        </div>
+        <div class='row'>
+            <div class='span12 col-md-12 columns twelve large-12'>
+                <textarea id='cellranger-schema' style='display: none; width: 0%; height: 0px; font-family: monospace;' class='form-control'></textarea>
+            </div>
+        </div>
+        <div class='row'>
+            <div>
+                <a href='https://github.com/jdorn/json-editor' id='jdorn'>Created using JSON editor</a>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div id="DropseqTools" class="tabcontent">
+  <div class='container'>
+    <div class='row'>
+        <div class='span8 col-md-12 columns twelve large-12'>
+            <h2>DropSeqTools 1.0 CWL</h2>
+            <h4>Instructions (coming soon):</h4>
+            <p>1. Please fill out the fields and copy/save the contents below the form to a file (<b>yee_run01_20180418.json</b>). Most of these fields and their descriptions are based on the <a href="https://www.ncbi.nlm.nih.gov/geo/info/examples/seq_template_v2.1.xls">GEO submission template</a>. <b>Make sure the extension is .json!</b></p>
+        <div id='dropseq-editor'></div>
+        </div>
+        <div class='span12 col-md-12 columns twelve large-12'>
+            <div>
+                <a href='#' id='direct_link'>Direct Link</a> (preserves schema, value, and options)
+            </div>
+            <h2>JSON Output</h2>
+            <p>Copy this file into a test document. You can also make changes to the JSON here and set the value in the editor by clicking <button class='btn btn-primary' id='setvalue'>Update Form</button></p>
+            <textarea id='dropseq-output' style='height: 800px;' class='form-control'></textarea>
+        </div>
+        <div class='row'>
+            <div class='span12 col-md-12 columns twelve large-12'>
+                <textarea id='dropseq-schema' style='display: none; width: 0%; height: 0px; font-family: monospace;' class='form-control'></textarea>
+            </div>
+        </div>
+        <div class='row'>
+            <div>
+                <a href='https://github.com/jdorn/json-editor' id='jdorn'>Created using JSON editor</a>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div id="Imaging" class="tabcontent">
+  <div class='container'>
+    <div class='row'>
+        <div class='span8 col-md-12 columns twelve large-12'>
+            <h2>Imaging 1.0 CWL</h2>
+            <h4>Instructions (coming soon):</h4>
+            <p>1. Please fill out the fields and copy/save the contents below the form to a file (<b>yee_run01_20180418.json</b>). Most of these fields and their descriptions are based on the <a href="https://www.ncbi.nlm.nih.gov/geo/info/examples/seq_template_v2.1.xls">GEO submission template</a>. <b>Make sure the extension is .json!</b></p>
+        <div id='imaging-editor'></div>
+        </div>
+        <div class='span12 col-md-12 columns twelve large-12'>
+            <div>
+                <a href='#' id='direct_link'>Direct Link</a> (preserves schema, value, and options)
+            </div>
+            <h2>JSON Output</h2>
+            <p>Copy this file into a test document. You can also make changes to the JSON here and set the value in the editor by clicking <button class='btn btn-primary' id='setvalue'>Update Form</button></p>
+            <textarea id='imaging-output' style='height: 800px;' class='form-control'></textarea>
+        </div>
+        <div class='row'>
+            <div class='span12 col-md-12 columns twelve large-12'>
+                <textarea id='imaging-schema' style='display: none; width: 0%; height: 0px; font-family: monospace;' class='form-control'></textarea>
+            </div>
+        </div>
+        <div class='row'>
+            <div>
+                <a href='https://github.com/jdorn/json-editor' id='jdorn'>Created using JSON editor</a>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+
+    var cellranger_schema;
+    if(window.location.href.match('[?&]cellranger_schema=([^&]+)')) {
+        try {
+            cellranger_schema = JSON.parse(LZString.decompressFromBase64(window.location.href.match('[?&]cellranger_schema=([^&]+)')[1]));
+        }
+        catch(e) {
+            console.log('invalid starting schema');
+        }
+    }
+    var dropseq_schema;
+    if(window.location.href.match('[?&]dropseq_schema=([^&]+)')) {
+        try {
+            dropseq_schema = JSON.parse(LZString.decompressFromBase64(window.location.href.match('[?&]dropseq_schema=([^&]+)')[1]));
+        }
+        catch(e) {
+            console.log('invalid starting schema');
+        }
+    }
+    var imaging_schema;
+    if(window.location.href.match('[?&]imaging_schema=([^&]+)')) {
+        try {
+            imaging_schema = JSON.parse(LZString.decompressFromBase64(window.location.href.match('[?&]imaging_schema=([^&]+)')[1]));
+        }
+        catch(e) {
+            console.log('invalid starting schema');
+        }
+    }
+
+
+    // Default starting schema for cellranger
+    if(!cellranger_schema) {
+        cellranger_schema = {
+            title: "Samples",
+            type: "object",
+            properties: {
+                aggr_nickname: {
+                    type: "string",
+                    default: "aggregated_01",
+                    description: "The eventual output directory for the aggregated output (if multisample expt, you may leave as-is for single sample expts)."
+                },
+                aggr_norm_method: {
+                    type: "string",
+                    default: "mapped",
+                    enum: [
+                        "mapped",
+                        "raw",
+                        "none"
+                    ],
+                    description: "See official documentation (<a href='https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/aggregate'>Depth Normalization</a>)"
+                },
+                assay_protocol: {
+                    type: "string",
+                    enum: [
+                        "chemV1",
+                        "chemV2"
+                    ],
+                    default: "chemV2",
+                    description: "Describe the chemistry version."
+                },
+                contact_email: {
+                    type: "string",
+                    default: "",
+                    description: "Describe point of contact for additional experimental details."
+                },
+                experiment_nickname: {
+                    type: "string",
+                    default: "expt_01",
+                    description: "Short, unique nickname that can be used to reference this experiment."
+                },
+                experiment_start_date: {
+                    type: "string",
+                    default: "2018-01-01",
+                    description: "Describe when this experiment was started (YYYY-MM-DD)."
+                },
+                experiment_summary: {
+                    type: "string",
+                    default: "",
+                    description: "Thorough description of the goals and objectives of this study. The abstract from the associated publication may be suitable. Include as much text as necessary."
+                },
+                extract_protocol_description: {
+                    type: "string",
+                    default: "",
+                    description: "Describe the protocols used to extract and prepare the material to be sequenced."
+                },
+                growth_protocol_description: {
+                    type: "string",
+                    default: "",
+                    description: "Optional. Describe the conditions that were used to grow/maintain organisms or cells prior to extract preperation."
+                },
+                investigator: {
+                    type: "string",
+                    default: "",
+                    description: "Main investigator responsible for this data."
+                },
+                library_construction_protocol: {
+                    type: "string",
+                    default: "10X Chromium chemistry V2",
+                    description: "Describe the library construction protocol."
+                },
+                library_strategy: {
+                    type: "string",
+                    default: "scRNA-Seq",
+                    description: "Leave as scRNA-Seq."
+                },
+                organism: {
+                    type: "string",
+                    enum: [
+                        "Human (HSA)",
+                        "Mouse (MMU)",
+                        "Rat (RNO)",
+                        "C. elegans (CEL)",
+                        "Barnyard (HSA+MMU)"
+                    ],
+                    description: "Intended organism of interest. Usually this corresponds to the reference genome specified below."
+                },
+                pi_name: {
+                    type: "string",
+                    default: "",
+                    description: "Usually PI or corresponding author."
+                },
+                processing_date: {
+                    type: "string",
+                    default: "2018-01-01",
+                    description: "Describe when this experiment was processed, typically the current date (YYYY-MM-DD)."
+                },
+                sequencing_center: {
+                    type: "string",
+                    default: "",
+                    description: "Name and secondary identifier (address or phone #) of the sequencing center or core (ie. IGM, 858-822-2754)."
+                },
+                sequencing_date: {
+                    type: "string",
+                    default: "2018-01-01",
+                    description: "Describe when this experiment came back from the sequencer (YYYY-MM-DD)."
+                },
+                treatment_protocol_description: {
+                    type: "string",
+                    default: "",
+                    description: "Optional. Describe the treatments applied to the biological material prior to extract preparation."
+                },
+                transcriptome: {
+                    type: "object",
+                    title: "Transcriptome directory",
+                    properties: {
+                        path: {
+                            type: "string",
+                            enum: [
+                              "refdata-cellranger-hg19-1.2.0",
+                              "refdata-cellranger-ercc92-1.2.0",
+                              "refdata-cellranger-GRCh38-1.2.0",
+                              "refdata-cellranger-mm10-1.2.0",
+                              "refdata-cellranger-hg19_and_mm10-1.2.0"
+                            ],
+                            default: "refdata-cellranger-hg19-1.2.0",
+                            description: "Human, mice, and barnyard reference datasets. See (<a href='https://support.10xgenomics.com/single-cell-gene-expression/software/downloads/latest'>official documentation</a>)."
+                        },
+                        class: {
+                            type: "string",
+                            enum: [
+                              "Directory"
+                            ],
+                            description: "Leave as 'Directory'"
+                        }
+                    }
+                },
+                samples: {
+                    type: "array",
+                    format: "grid",
+                    title: "Samples",
+                    items: {
+                        type: "object",
+                        title: "sample",
+                        properties: {
+                            library_nickname: {
+                                type: "string",
+                                default: "sample_01",
+                                description: "The eventual output directory for this single sample."
+                            },
+                            library_prep: {
+                                type: "string",
+                                default: "PolyA select",
+                                description: "Leave as is, unless there is an exception."
+                            },
+                            sample_id: {
+                                type: "string",
+                                default: "",
+                                description: "The prefix of the files located inside the fastq directory corresponding to the specific single sample within the fastq directory. See official documentation (<a href='https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/fastq-input'>--sample parameter</a>)"
+                            },
+                            fastq_dir: {
+                                type: "object",
+                                title: "Fastq directory",
+                                properties: {
+                                    path: {
+                                        type: "string",
+                                        default: "",
+                                        description: "This is the name of the directory you are uploading to on AWS, INSIDE fastq_dir. See official documentation (<a href='https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/fastq-input'>--fastqs</a>). You will just need the toplevel name of the directory, not the full path."
+                                    },
+                                    class: {
+                                        type: "string",
+                                        enum: [
+                                          "Directory"
+                                        ],
+                                        description: "Leave as 'Directory'"
+                                    }
+                                }
+                            },
+                            instrument_model: {
+                                type: "string",
+                                default: "Illumina HiSeq 4000",
+                                enum: [
+                                    "Illumina Genome Analyzer",
+                                    "Illumina Genome Analyzer II",
+                                    "Illumina Genome Analyzer IIx",
+                                    "Illumina HiSeq 2000",
+                                    "Illumina HiSeq 1000",
+                                    "Illumina HiSeq 2500",
+                                    "Illumina HiSeq 4000",
+                                    "Illumina NextSeq 500",
+                                    "Illumina MiSeq",
+                                    "AB SOLiD System",
+                                    "AB SOLiD System 2.0",
+                                    "AB SOLiD System 3.0",
+                                    "AB SOLiD 4 System",
+                                    "AB SOLiD 4hq System",
+                                    "AB SOLiD PI System",
+                                    "AB 5500xl Genetic Analyzer",
+                                    "AB 5500 Genetic Analyzer",
+                                    "454 GS",
+                                    "454 GS 20",
+                                    "454 GS FLX",
+                                    "454 GS Junior",
+                                    "454 GS FLX Titanium",
+                                    "Helicos HeliScope",
+                                    "PacBio RS",
+                                    "PacBio RS II",
+                                    "Complete Genomics",
+                                    "Ion Torrent PGM"
+                                ]
+                            },
+                            read1_length: {
+                                type: "number",
+                                default: 26
+                            },
+                            read2_length: {
+                                type: "number",
+                                default: 98
+                            },
+                            expect_cells: {
+                                type: "number",
+                                default: 3000,
+                                description: "Expected number of recovered cells. By default, 10X cellranger uses 3000."
+                            },
+                            characteristics: {
+                                type: "array",
+                                format: "grid",
+                                title: "Characteristics",
+                                description: "Replace 'tag' with a biosource characteristic (e.g. strain, tissue, developmental stage, tumor stage, etc), and then enter the value for each sample beneath (e.g. 129SV, brain, embryo, etc). You may add multiple characteristics columns to this template (see 'Metadata Example' spreadsheet).",
+                                items: {
+                                    title: "tag",
+                                    type: "object",
+                                    properties: {
+                                        name: {
+                                            type: "string",
+                                            default: "Tag (ie. cell type)"
+                                        },
+                                        value: {
+                                            type: "string",
+                                            default: "Tag value (ie. ES-derived neural progenitor cells)"
+                                        }
+                                    }
+                                }
+                            },
+                        }
+                    },
+                    default: [
+                    ]
+                }
+            }
+        }
+    }
+
+    // Default starting schema for dropseq
+    if(!dropseq_schema) {
+        dropseq_schema = {
+            title: "Samples",
+            type: "object",
+            properties: {
+                assay_protocol: {
+                    type: "string",
+                    enum: [
+                        "SeqWell"
+                    ],
+                    description: "Leave as SeqWell unless there is an exception."
+                },
+                contact_email: {
+                    type: "string",
+                    default: "",
+                    description: "Describe point of contact for additional experimental details."
+                },
+                experiment_nickname: {
+                    type: "string",
+                    default: "expt_01",
+                    description: "Short, unique nickname that can be used to reference this experiment."
+                },
+                experiment_start_date: {
+                    type: "string",
+                    default: "2018-01-01",
+                    description: "Describe when this experiment was started (YYYY-MM-DD)."
+                },
+                experiment_summary: {
+                    type: "string",
+                    default: "",
+                    description: "Thorough description of the goals and objectives of this study. The abstract from the associated publication may be suitable. Include as much text as necessary."
+                },
+                extract_protocol_description: {
+                    type: "string",
+                    default: "",
+                    description: "Describe the protocols used to extract and prepare the material to be sequenced."
+                },
+                growth_protocol_description: {
+                    type: "string",
+                    default: "",
+                    description: "Optional. Describe the conditions that were used to grow/maintain organisms or cells prior to extract preperation."
+                },
+                investigator: {
+                    type: "string",
+                    default: "",
+                    description: "Main investigator responsible for this data."
+                },
+                library_construction_protocol: {
+                    type: "string",
+                    default: "",
+                    description: "Describe the library construction protocol."
+                },
+                library_strategy: {
+                    type: "string",
+                    default: "scRNA-Seq",
+                    description: "Leave as scRNA-Seq."
+                },
+                organism: {
+                    type: "string",
+                    enum: [
+                        "Human (HSA)",
+                        "Mouse (MMU)",
+                        "Rat (RNO)",
+                        "C. elegans (CEL)",
+                        "Barnyard (HSA+MMU)"
+                    ],
+                    description: "Intended organism of interest. Usually this corresponds to the reference genome specified below. If studying more than one species, please submit a separate manifest."
+                },
+                pi_name: {
+                    type: "string",
+                    default: "Gene Yeo",
+                    description: "Usually PI or corresponding author."
+                },
+                processing_date: {
+                    type: "string",
+                    default: "2018-01-01",
+                    description: "Describe when this experiment was processed, typically the current date (YYYY-MM-DD)."
+                },
+                sequencing_center: {
+                    type: "string",
+                    default: "",
+                    description: "Name and secondary identifier (address or phone #) of the sequencing center or core (ie. IGM, 858-822-2754)."
+                },
+                sequencing_date: {
+                    type: "string",
+                    default: "2018-01-01",
+                    description: "Describe when this experiment came back from the sequencer (YYYY-MM-DD)."
+                },
+                treatment_protocol_description: {
+                    type: "string",
+                    default: "",
+                    description: "Optional. Describe the treatments applied to the biological material prior to extract preparation."
+                },
+                samples: {
+                    type: "array",
+                    format: "grid",
+                    title: "Samples",
+                    items: {
+                        type: "object",
+                        title: "Sample",
+                        properties: {
+                            expt_id: {
+                                type: "string",
+                                default: "run_01"
+                            },
+                            library_prep: {
+                                type: "string",
+                                default: "PolyA select"
+                            },
+                            sample_id: {
+                                type: "string",
+                                default: "sample_01"
+                            },
+
+
+                            read1: {
+                                type: "object",
+                                title: "Fastq Read 1 File",
+                                properties: {
+                                    path: {
+                                        type: "string",
+                                        default: "fastq_R1.fastq.gz"
+                                    },
+                                    class: {
+                                        type: "string",
+                                        enum: [
+                                          "File"
+                                        ],
+                                        description: "Leave as 'File'"
+                                    }
+                                }
+                            },
+                            read1_length: {
+                                type: "number",
+                                default: 26
+                            },
+                            read2: {
+                                type: "object",
+                                title: "Fastq Read 2 File",
+                                properties: {
+                                    path: {
+                                        type: "string",
+                                        default: "fastq_R2.fastq.gz"
+                                    },
+                                    class: {
+                                        type: "string",
+                                        enum: [
+                                          "File"
+                                        ],
+                                        description: "Leave as 'File'"
+                                    }
+                                }
+                            },
+                            read2_length: {
+                                type: "number",
+                                default: 98
+                            },
+                            instrument_model: {
+                                type: "string",
+                                default: "Illumina HiSeq 4000",
+                                enum: [
+                                    "Illumina Genome Analyzer",
+                                    "Illumina Genome Analyzer II",
+                                    "Illumina Genome Analyzer IIx",
+                                    "Illumina HiSeq 2000",
+                                    "Illumina HiSeq 1000",
+                                    "Illumina HiSeq 2500",
+                                    "Illumina HiSeq 4000",
+                                    "Illumina NextSeq 500",
+                                    "Illumina MiSeq",
+                                    "AB SOLiD System",
+                                    "AB SOLiD System 2.0",
+                                    "AB SOLiD System 3.0",
+                                    "AB SOLiD 4 System",
+                                    "AB SOLiD 4hq System",
+                                    "AB SOLiD PI System",
+                                    "AB 5500xl Genetic Analyzer",
+                                    "AB 5500 Genetic Analyzer",
+                                    "454 GS",
+                                    "454 GS 20",
+                                    "454 GS FLX",
+                                    "454 GS Junior",
+                                    "454 GS FLX Titanium",
+                                    "Helicos HeliScope",
+                                    "PacBio RS",
+                                    "PacBio RS II",
+                                    "Complete Genomics",
+                                    "Ion Torrent PGM"
+                                ]
+                            },
+                            core_barcodes: {
+                                type: "integer",
+                                default: 2000,
+                                description: "Only count cells with at least this many reads."
+                            },
+                            expected_barcodes: {
+                                type: "integer",
+                                default: 2000,
+                                description: "Expected number of recovered cells."
+                            },
+                            species_genome_dir: {
+                                type: "object",
+                                title: "STAR index",
+                                properties: {
+                                    path: {
+                                        type: "string",
+                                        enum: [
+                                          "hg19_star/",
+                                          "mm10_star/",
+                                          "hg19mm10_star/"
+                                        ],
+                                        default: "hg19_star/"
+                                    },
+                                    class: {
+                                        type: "string",
+                                        enum: [
+                                          "Directory"
+                                        ],
+                                        description: "Leave as 'Directory'"
+                                    }
+                                }
+                            },
+                            species_reference_fasta: {
+                                type: "object",
+                                title: "Reference fasta",
+                                properties: {
+                                    path: {
+                                        type: "string",
+                                        enum: [
+                                          "hg19.fasta",
+                                          "mm10.fasta",
+                                          "hg19_mm10_transgenes.fasta"
+                                        ],
+                                        default: "hg19.fasta"
+                                    },
+                                    class: {
+                                        type: "string",
+                                        enum: [
+                                          "File"
+                                        ],
+                                        description: "Leave as 'File'"
+                                    }
+                                }
+                            },
+                            species_reference_refFlat: {
+                                type: "object",
+                                title: "refFlat file",
+                                properties: {
+                                    path: {
+                                        type: "string",
+                                        enum: [
+                                          "hg19.refFlat",
+                                          "mm10.refFlat",
+                                          "hg19_mm10_transgenes.refFlat"
+                                        ],
+                                        default: "hg19.refFlat"
+                                    },
+                                    class: {
+                                        type: "string",
+                                        enum: [
+                                          "File"
+                                        ],
+                                        description: "Leave as 'File'"
+                                    }
+                                }
+                            },
+                            characteristics: {
+                                type: "array",
+                                format: "grid",
+                                title: "Characteristics",
+                                description: "Replace 'tag' with a biosource characteristic (e.g. strain, tissue, developmental stage, tumor stage, etc), and then enter the value for each sample beneath (e.g. 129SV, brain, embryo, etc). You may add multiple characteristics columns to this template (see 'Metadata Example' spreadsheet).",
+                                items: {
+                                    title: "tag",
+                                    type: "object",
+                                    properties: {
+                                        name: {
+                                            type: "string",
+                                            default: "Tag (ie. cell type)"
+                                        },
+                                        value: {
+                                            type: "string",
+                                            default: "Tag value (ie. ES-derived neural progenitor cells)"
+                                        }
+                                    }
+                                }
+                            },
+                        }
+                    },
+                    default: [
+                    ]
+                }
+            }
+        }
+    }
+
+    // Default starting schema for imaging metadata
+    if(!imaging_schema) {
+        imaging_schema = {
+            title: "Samples",
+            type: "object",
+            properties: {
+                assay_protocol: {
+                    type: "string",
+                    enum: [
+                        "SeqWell"
+                    ],
+                    description: "Leave as SeqWell unless there is an exception."
+                },
+                contact_email: {
+                    type: "string",
+                    default: "",
+                    description: "Describe point of contact for additional experimental details."
+                },
+                experiment_nickname: {
+                    type: "string",
+                    default: "expt_01",
+                    description: "Short, unique nickname that can be used to reference this experiment."
+                },
+                experiment_start_date: {
+                    type: "string",
+                    default: "2018-01-01",
+                    description: "Describe when this experiment was started (YYYY-MM-DD)."
+                },
+                experiment_summary: {
+                    type: "string",
+                    default: "",
+                    description: "Thorough description of the goals and objectives of this study. The abstract from the associated publication may be suitable. Include as much text as necessary."
+                },
+                extract_protocol_description: {
+                    type: "string",
+                    default: "",
+                    description: "Describe the protocols used to extract and prepare the material to be sequenced."
+                },
+                growth_protocol_description: {
+                    type: "string",
+                    default: "",
+                    description: "Optional. Describe the conditions that were used to grow/maintain organisms or cells prior to extract preperation."
+                },
+                investigator: {
+                    type: "string",
+                    default: "",
+                    description: "Main investigator responsible for this data."
+                },
+                library_construction_protocol: {
+                    type: "string",
+                    default: "",
+                    description: "Describe the library construction protocol."
+                },
+                library_strategy: {
+                    type: "string",
+                    default: "scRNA-Seq",
+                    description: "Leave as scRNA-Seq."
+                },
+                organism: {
+                    type: "string",
+                    enum: [
+                        "Human (HSA)",
+                        "Mouse (MMU)",
+                        "Rat (RNO)",
+                        "C. elegans (CEL)",
+                        "Barnyard (HSA+MMU)"
+                    ],
+                    description: "Intended organism of interest. Usually this corresponds to the reference genome specified below. If studying more than one species, please submit a separate manifest."
+                },
+                pi_name: {
+                    type: "string",
+                    default: "Gene Yeo",
+                    description: "Usually PI or corresponding author."
+                },
+                processing_date: {
+                    type: "string",
+                    default: "2018-01-01",
+                    description: "Describe when this experiment was processed, typically the current date (YYYY-MM-DD)."
+                },
+                treatment_protocol_description: {
+                    type: "string",
+                    default: "",
+                    description: "Optional. Describe the treatments applied to the biological material prior to extract preparation."
+                },
+                samples: {
+                    type: "array",
+                    format: "grid",
+                    title: "Samples",
+                    items: {
+                        type: "object",
+                        title: "Sample",
+                        properties: {
+                            expt_id: {
+                                type: "string",
+                                default: "run_01"
+                            },
+                            instrument_model: {
+                                type: "string",
+                                default: "some-imaging-instrument",
+                                enum: [
+                                    "some-other-imaging-instrument",
+                                    "how-many-instruments-are-there?",
+                                    "not-too-many-i-hope"
+                                ]
+                            },
+                            characteristics: {
+                                type: "array",
+                                format: "grid",
+                                title: "Characteristics",
+                                description: "Replace 'tag' with a biosource characteristic (e.g. strain, tissue, developmental stage, tumor stage, etc), and then enter the value for each sample beneath (e.g. 129SV, brain, embryo, etc). You may add multiple characteristics columns to this template (see 'Metadata Example' spreadsheet).",
+                                items: {
+                                    title: "tag",
+                                    type: "object",
+                                    properties: {
+                                        name: {
+                                            type: "string",
+                                            default: "Tag (ie. cell type)"
+                                        },
+                                        value: {
+                                            type: "string",
+                                            default: "Tag value (ie. ES-derived neural progenitor cells)"
+                                        }
+                                    }
+                                }
+                            },
+                        }
+                    },
+                    default: [
+                    ]
+                }
+            }
+        }
+    }
+
+    // Divs/textareas on the page
+    var $cellranger_schema = document.getElementById('cellranger-schema');
+    var $cellranger_output = document.getElementById('cellranger-output');
+    var $cellranger_editor = document.getElementById('cellranger-editor');
+    var $cellranger_validate = document.getElementById('cellranger-validate');
+
+    var $dropseq_schema = document.getElementById('dropseq-schema');
+    var $dropseq_output = document.getElementById('dropseq-output');
+    var $dropseq_editor = document.getElementById('dropseq-editor');
+    var $dropseq_validate = document.getElementById('dropseq-validate');
+
+    var $imaging_schema = document.getElementById('imaging-schema');
+    var $imaging_output = document.getElementById('imaging-output');
+    var $imaging_editor = document.getElementById('imaging-editor');
+    var $imaging_validate = document.getElementById('imaging-validate');
+
+
+    // Buttons
+    var $set_schema_button = document.getElementById('setschema');
+    var $set_value_button = document.getElementById('setvalue');
+
+    var cellranger_jsoneditor;
+    var dropseq_jsoneditor;
+    var imaging_jsoneditor;
+
+
+    var cellranger_updateDirectLink = function() {
+        var url = window.location.href.replace(/\?.*/,'');
+
+        url += '?cellranger_schema='+LZString.compressToBase64(JSON.stringify(cellranger_schema));
+        url += '&value='+LZString.compressToBase64(JSON.stringify(jsoneditor.getValue()));
+
+        for(var i in JSONEditor.defaults.options) {
+            if(!JSONEditor.defaults.options.hasOwnProperty(i)) continue;
+            if(JSONEditor.defaults.options[i]===false) continue;
+            else if(JSONEditor.defaults.options[i]===true) {
+                url += '&'+i;
+            }
+            else {
+                url += '&'+i+'='+JSONEditor.defaults.options[i];
+            }
+        }
+
+        document.getElementById('direct_link').href = url;
+    };
+
+    var dropseq_updateDirectLink = function() {
+        var url = window.location.href.replace(/\?.*/,'');
+
+        url += '?dropseq_schema='+LZString.compressToBase64(JSON.stringify(dropseq_schema));
+        url += '&value='+LZString.compressToBase64(JSON.stringify(jsoneditor.getValue()));
+
+        for(var i in JSONEditor.defaults.options) {
+            if(!JSONEditor.defaults.options.hasOwnProperty(i)) continue;
+            if(JSONEditor.defaults.options[i]===false) continue;
+            else if(JSONEditor.defaults.options[i]===true) {
+                url += '&'+i;
+            }
+            else {
+                url += '&'+i+'='+JSONEditor.defaults.options[i];
+            }
+        }
+
+        document.getElementById('direct_link').href = url;
+    };
+
+    var imaging_updateDirectLink = function() {
+        var url = window.location.href.replace(/\?.*/,'');
+
+        url += '?imaging_schema='+LZString.compressToBase64(JSON.stringify(imaging_schema));
+        url += '&value='+LZString.compressToBase64(JSON.stringify(jsoneditor.getValue()));
+
+        for(var i in JSONEditor.defaults.options) {
+            if(!JSONEditor.defaults.options.hasOwnProperty(i)) continue;
+            if(JSONEditor.defaults.options[i]===false) continue;
+            else if(JSONEditor.defaults.options[i]===true) {
+                url += '&'+i;
+            }
+            else {
+                url += '&'+i+'='+JSONEditor.defaults.options[i];
+            }
+        }
+
+        document.getElementById('direct_link').href = url;
+    };
+
+    var cellranger_reload = function(keep_value) {
+        var startval = (cellranger_jsoneditor && keep_value)? cellranger_jsoneditor.getValue() : window.startval;
+        window.startval = undefined;
+
+        if(cellranger_jsoneditor) cellranger_jsoneditor.destroy();
+        cellranger_jsoneditor = new JSONEditor($cellranger_editor,{
+            schema: cellranger_schema,
+            startval: startval
+        });
+        window.jsoneditor = cellranger_jsoneditor;
+
+        // When the value of the editor changes, update the JSON output and validation message
+        cellranger_jsoneditor.on('change',function() {
+            var json = cellranger_jsoneditor.getValue();
+
+            $cellranger_output.value = "#!/usr/bin/env cellranger-runner\n" + JSON.stringify(json,null,2);
+
+            var validation_errors = cellranger_jsoneditor.validate();
+            // Show validation errors if there are any
+            if(validation_errors.length) {
+                $cellranger_validate.value = JSON.stringify(validation_errors,null,2);
+            }
+            else {
+                $cellranger_validate.value = 'valid';
+            }
+
+            cellranger_updateDirectLink();
+        });
+    };
+
+    var dropseq_reload = function(keep_value) {
+        var startval = (dropseq_jsoneditor && keep_value)? dropseq_jsoneditor.getValue() : window.startval;
+        window.startval = undefined;
+
+        if(dropseq_jsoneditor) dropseq_jsoneditor.destroy();
+        dropseq_jsoneditor = new JSONEditor($dropseq_editor,{
+            schema: dropseq_schema,
+            startval: startval
+        });
+        window.jsoneditor = dropseq_jsoneditor;
+
+        // When the value of the editor changes, update the JSON output and validation message
+        dropseq_jsoneditor.on('change',function() {
+            var json = dropseq_jsoneditor.getValue();
+
+            $dropseq_output.value = "#!/usr/bin/env dropseq-runner\n" + JSON.stringify(json,null,2);
+
+            var validation_errors = dropseq_jsoneditor.validate();
+            // Show validation errors if there are any
+            if(validation_errors.length) {
+                $dropseq_validate.value = JSON.stringify(validation_errors,null,2);
+            }
+            else {
+                $dropseq_validate.value = 'valid';
+            }
+
+            dropseq_updateDirectLink();
+        });
+    };
+
+    var imaging_reload = function(keep_value) {
+        var startval = (imaging_jsoneditor && keep_value)? imaging_jsoneditor.getValue() : window.startval;
+        window.startval = undefined;
+
+        if(imaging_jsoneditor) imaging_jsoneditor.destroy();
+        imaging_jsoneditor = new JSONEditor($imaging_editor,{
+            schema: imaging_schema,
+            startval: startval
+        });
+        window.jsoneditor = imaging_jsoneditor;
+
+        // When the value of the editor changes, update the JSON output and validation message
+        imaging_jsoneditor.on('change',function() {
+            var json = imaging_jsoneditor.getValue();
+
+            $imaging_output.value = "#!/usr/bin/env imaging-runner\n" + JSON.stringify(json,null,2);
+
+            var validation_errors = imaging_jsoneditor.validate();
+            // Show validation errors if there are any
+            if(validation_errors.length) {
+                $imaging_validate.value = JSON.stringify(validation_errors,null,2);
+            }
+            else {
+                $imaging_validate.value = 'valid';
+            }
+
+            imaging_updateDirectLink();
+        });
+    };
+
+
+    // Start the schema and output textareas with initial values
+    $cellranger_schema.value = JSON.stringify(cellranger_schema,null,2);
+    $dropseq_schema.value = JSON.stringify(dropseq_schema,null,2);
+    $imaging_schema.value = JSON.stringify(imaging_schema,null,2);
+
+    $cellranger_output.value = '';
+    $dropseq_output.value = '';
+    $imaging_output.value = '';
+
+    // When the 'update form' button is clicked, set the editor's value
+    $set_value_button.addEventListener('click',function() {
+        cellranger_jsoneditor.setValue(JSON.parse($cellranger_output.value));
+        dropseq_jsoneditor.setValue(JSON.parse($dropseq_output.value));
+        imaging_jsoneditor.setValue(JSON.parse($imaging_output.value));
+    });
+
+    // Set the theme by loading the right stylesheets
+    var setTheme = function(theme,no_reload) {
+        theme = theme || '';
+
+        var mapping = {
+            barebones: '',
+            html: '',
+            bootstrap2: '//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css',
+            bootstrap3: '//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css',
+            foundation3: '//cdnjs.cloudflare.com/ajax/libs/foundation/3.2.5/stylesheets/foundation.css',
+            foundation4: '//cdn.jsdelivr.net/foundation/4.3.2/css/foundation.min.css',
+            foundation5: '//cdn.jsdelivr.net/foundation/5.0.2/css/foundation.min.css',
+            foundation6: '//cdn.jsdelivr.net/foundation/6.2.1/foundation.min.css',
+            jqueryui: '//code.jquery.com/ui/1.10.3/themes/south-street/jquery-ui.css'
+        };
+
+        if(typeof mapping[theme] === 'undefined') {
+            theme = 'bootstrap3';
+            document.getElementById('theme_switcher').value = theme;
+        }
+
+        JSONEditor.defaults.options.theme = 'bootstrap3';
+        JSONEditor.defaults.options.object_layout = 'grid';
+
+        document.getElementById('theme_stylesheet').href = mapping[theme];
+        // document.getElementById('theme_switcher').value = JSONEditor.defaults.options.theme;
+
+        if(!no_reload) cellranger_reload(true);
+        if(!no_reload) dropseq_reload(true);
+        if(!no_reload) imaging_reload(true);
+    };
+
+    // Set the icontheme
+    // Set the theme by loading the right stylesheets
+    var setIconlib = function(iconlib,no_reload) {
+        iconlib = iconlib || '';
+        var mapping = {
+            foundation2: '//cdnjs.cloudflare.com/ajax/libs/foundicons/2.0/stylesheets/general_foundicons.css',
+            foundation3: '//cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css',
+            fontawesome3: '//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.css',
+            fontawesome4: '//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css'
+        };
+
+        JSONEditor.defaults.options.iconlib = iconlib;
+
+        document.getElementById('icon_stylesheet').href = mapping[iconlib] || '';
+        document.getElementById('icon_switcher').value = JSONEditor.defaults.options.iconlib;
+
+        if(!no_reload) cellranger_reload(true);
+        if(!no_reload) dropseq_reload(true);
+        if(!no_reload) imaging_reload(true);
+    };
+
+
+
+    // Change listeners for options
+
+
+    // Get starting value from url
+    if(window.location.href.match('[?&]value=([^&]+)')) {
+      window.startval = JSON.parse(LZString.decompressFromBase64(window.location.href.match('[?&]value=([^&]+)')[1]));
+    }
+
+    // Set options from direct link
+    setTheme('bootstrap3', true);
+
+    cellranger_reload();
+    dropseq_reload();
+    imaging_reload();
+
+})();
+
+function openPipeline(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+</script>
+</body>
+</html>
