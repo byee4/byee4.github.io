@@ -63,18 +63,25 @@
 
 </head>
 <body>
+
 <div class="tab">
-  <button class="tablinks" onclick="openPipeline(event, 'Cellranger')">Cellranger</button>
-  <button class="tablinks" onclick="openPipeline(event, 'DropseqTools')">Dropseqtools</button>
-  <button class="tablinks" onclick="openPipeline(event, 'Imaging')">Imaging</button>
+  <button class="tablinks" onclick="openPage('Instructions', this)" id="defaultOpen">Instructions</button>
+  <button class="tablinks" onclick="openPage('Cellranger', this)">Cellranger</button>
+  <button class="tablinks" onclick="openPage('DropseqTools', this)">Dropseqtools</button>
+  <button class="tablinks" onclick="openPage('Imaging', this)">Imaging</button>
+</div>
+
+<div id="Instructions" class="tabcontent">
+    <p class='container'>
+        <h1>Select the pipeline you wish to run</h1>
+    </p>
 </div>
 
 <div id="Cellranger" class="tabcontent">
   <div class='container'>
     <div class='row'>
         <div class='span8 col-md-12 columns twelve large-12'>
-            <h2>Cellranger 2.1.1 CWL</h2>
-            <h4>Instructions (coming soon):</h4>
+            <h2>Cellranger 2.1.1</h2>
             <p>1. Please fill out the fields and copy/save the contents below the form to a file (<b>yee_run01_20180418.json</b>). Most of these fields and their descriptions are based on the <a href="https://www.ncbi.nlm.nih.gov/geo/info/examples/seq_template_v2.1.xls">GEO submission template</a>. <b>Make sure the extension is .json!</b></p>
         <div id='cellranger-editor'></div>
         </div>
@@ -104,8 +111,7 @@
   <div class='container'>
     <div class='row'>
         <div class='span8 col-md-12 columns twelve large-12'>
-            <h2>DropSeqTools 1.0 CWL</h2>
-            <h4>Instructions (coming soon):</h4>
+            <h2>DropSeqTools 1.0</h2>
             <p>1. Please fill out the fields and copy/save the contents below the form to a file (<b>yee_run01_20180418.json</b>). Most of these fields and their descriptions are based on the <a href="https://www.ncbi.nlm.nih.gov/geo/info/examples/seq_template_v2.1.xls">GEO submission template</a>. <b>Make sure the extension is .json!</b></p>
         <div id='dropseq-editor'></div>
         </div>
@@ -135,7 +141,6 @@
   <div class='container'>
     <div class='row'>
         <div class='span8 col-md-12 columns twelve large-12'>
-            <h2>Imaging 1.0 CWL</h2>
             <h4>Instructions (coming soon):</h4>
             <p>1. Please fill out the fields and copy/save the contents below the form to a file (<b>yee_run01_20180418.json</b>). Most of these fields and their descriptions are based on the <a href="https://www.ncbi.nlm.nih.gov/geo/info/examples/seq_template_v2.1.xls">GEO submission template</a>. <b>Make sure the extension is .json!</b></p>
         <div id='imaging-editor'></div>
@@ -742,63 +747,51 @@
         }
     }
 
-    // Default starting schema for imaging metadata
+    // Default starting schema
     if(!imaging_schema) {
         imaging_schema = {
             title: "Samples",
             type: "object",
             properties: {
-                assay_protocol: {
+                experiment_type: {
                     type: "string",
-                    enum: [
-                        "SeqWell"
-                    ],
-                    description: "Leave as SeqWell unless there is an exception."
+                    default: ""
                 },
                 contact_email: {
                     type: "string",
-                    default: "",
-                    description: "Describe point of contact for additional experimental details."
+                    default: ""
                 },
                 experiment_nickname: {
                     type: "string",
-                    default: "expt_01",
-                    description: "Short, unique nickname that can be used to reference this experiment."
+                    default: ""
                 },
-                experiment_start_date: {
-                    type: "string",
-                    default: "2018-01-01",
-                    description: "Describe when this experiment was started (YYYY-MM-DD)."
+                wells_per_plate: {
+                    type: "integer",
+                    default: 96
                 },
                 experiment_summary: {
                     type: "string",
-                    default: "",
-                    description: "Thorough description of the goals and objectives of this study. The abstract from the associated publication may be suitable. Include as much text as necessary."
+                    default: ""
                 },
-                extract_protocol_description: {
+                Channel_Type: {
                     type: "string",
-                    default: "",
-                    description: "Describe the protocols used to extract and prepare the material to be sequenced."
+                    default: ""
                 },
-                growth_protocol_description: {
+                magnification_power: {
                     type: "string",
-                    default: "",
-                    description: "Optional. Describe the conditions that were used to grow/maintain organisms or cells prior to extract preperation."
+                    default: ""
                 },
                 investigator: {
                     type: "string",
-                    default: "",
-                    description: "Main investigator responsible for this data."
+                    default: "John Doe"
                 },
-                library_construction_protocol: {
+                cell_growth_protocol: {
                     type: "string",
-                    default: "",
-                    description: "Describe the library construction protocol."
+                    default: ""
                 },
-                library_strategy: {
-                    type: "string",
-                    default: "scRNA-Seq",
-                    description: "Leave as scRNA-Seq."
+                number_of_plates: {
+                    type: "integer",
+                    default: 1
                 },
                 organism: {
                     type: "string",
@@ -808,23 +801,26 @@
                         "Rat (RNO)",
                         "C. elegans (CEL)",
                         "Barnyard (HSA+MMU)"
-                    ],
-                    description: "Intended organism of interest. Usually this corresponds to the reference genome specified below. If studying more than one species, please submit a separate manifest."
+                    ]
                 },
                 pi_name: {
                     type: "string",
-                    default: "Gene Yeo",
-                    description: "Usually PI or corresponding author."
+                    default: "Gene Yeo"
                 },
-                processing_date: {
+                image_capture_date: {
                     type: "string",
-                    default: "2018-01-01",
-                    description: "Describe when this experiment was processed, typically the current date (YYYY-MM-DD)."
+                    default: ""
+                },
+                microscope: {
+                    type: "string"
+                },
+                imaging_and_segmentation_software: {
+                    type: "string",
+                    default: ""
                 },
                 treatment_protocol_description: {
                     type: "string",
-                    default: "",
-                    description: "Optional. Describe the treatments applied to the biological material prior to extract preparation."
+                    default: ""
                 },
                 samples: {
                     type: "array",
@@ -834,35 +830,26 @@
                         type: "object",
                         title: "Sample",
                         properties: {
-                            expt_id: {
+                            sample_id: {
                                 type: "string",
-                                default: "run_01"
-                            },
-                            instrument_model: {
-                                type: "string",
-                                default: "some-imaging-instrument",
-                                enum: [
-                                    "some-other-imaging-instrument",
-                                    "how-many-instruments-are-there?",
-                                    "not-too-many-i-hope"
-                                ]
+                                default: "sample_01"
                             },
                             characteristics: {
                                 type: "array",
                                 format: "grid",
                                 title: "Characteristics",
-                                description: "Replace 'tag' with a biosource characteristic (e.g. strain, tissue, developmental stage, tumor stage, etc), and then enter the value for each sample beneath (e.g. 129SV, brain, embryo, etc). You may add multiple characteristics columns to this template (see 'Metadata Example' spreadsheet).",
+
                                 items: {
                                     title: "tag",
                                     type: "object",
                                     properties: {
                                         name: {
                                             type: "string",
-                                            default: "Tag (ie. cell type)"
+                                            default: ""
                                         },
                                         value: {
                                             type: "string",
-                                            default: "Tag value (ie. ES-derived neural progenitor cells)"
+                                            default: ""
                                         }
                                     }
                                 }
@@ -1154,6 +1141,25 @@ function openPipeline(evt, cityName) {
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
 }
+
+function openPage(pageName,elmnt,color) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].style.backgroundColor = "";
+    }
+    document.getElementById(pageName).style.display = "block";
+    elmnt.style.backgroundColor = color;
+
+}
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+
 </script>
 </body>
 </html>
+
