@@ -90,16 +90,10 @@ var default_imaging = {
 
                         items: {
                             title: "tag",
-                            type: "object",
-                            properties: {
-                                name: {
-                                    type: "string",
-                                    default: ""
-                                },
-                                value: {
-                                    type: "string",
-                                    default: ""
-                                }
+                            type: "string",
+                            media: {
+                                binaryEncoding: "base64",
+                                type: "image/png"
                             }
                         }
                     },
