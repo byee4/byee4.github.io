@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>JSON Editor Example</title>
+    <title>CRED Metadata Generator</title>
 
     <!-- placeholders for the theme switcher -->
     <link rel='stylesheet' id='theme_stylesheet'>
@@ -10,6 +10,9 @@
 
     <style>[class*="foundicon-"] {font-family: GeneralFoundicons;font-style: normal;}</style>
     <script src='dist/jsoneditor.js'></script>
+    <script type='text/javascript' src='schema/default_cellranger.js'></script>
+    <script type='text/javascript' src='schema/default_dropseq.js'></script>
+    <script type='text/javascript' src='schema/default_imaging.js'></script>
 
     <script>
     /**
@@ -75,6 +78,45 @@
     <p class='container'>
         <h1>Select the pipeline you wish to run</h1>
     </p>
+    <p>
+        <h2>Step 1. Fill out the form fields and save your metadata file.</h2>
+        <p>Upon upload, we will use this file to define and process your data, so please keep this file for your records.</p>
+        <video width="600" height="400" controls>
+            <source src="tutorial-videos/save-json.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+        </video>
+    </p>
+    <p>
+        <h2>Step 2. Sign into the CRED portal and navigate to your own folder.</h2>
+        <p><h4><a href="https://002620837336.signin.aws.amazon.com/console" target="_blank">Link to our AWS account</a></h4></p>
+        <p>
+            <li>Use the supplied username and password. If you do not have one, please send an email to: <a href="mailto:bay001@ucsd.edu?Subject=U19%20credentials" target="_top">bay001@ucsd.edu</a></li>
+            <li>The account ID/alias should be: 002620837336</li>
+            <li>AWS has a multitude of services, please be sure to search for "S3" (Scalable Storage in the Cloud)</li>
+        </p>
+        <video width="600" height="400" controls>
+            <source src="tutorial-videos/navigate-json-dir.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+        </video>
+    </p>
+    <p>
+        <h2>Step 3. Upload & verify your metadata file from (1) as well as your raw data files (or directory of fastqs if running Cellranger).</h2>
+        <p>
+            <li>Upload files/directories to their respective folders (ie. sequencing fastq files/directories should go in the "fastq_dir"</li>
+            <li>Upload ALL json files (regardless of pipeline/domain) to the "json_dir"</li>
+        </p>
+        <p><h3>In "json_dir":</h3></p>
+        <video width="600" height="400" controls>
+
+            <source src="tutorial-videos/upload-json.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+        </video>
+        <p><h3>In "fastq_dir":</h3></p>
+        <video width="600" height="400" controls>
+            <source src="tutorial-videos/upload-fastq.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+        </video>
+    </p>
 </div>
 
 <div id="Cellranger" class="tabcontent">
@@ -82,16 +124,11 @@
     <div class='row'>
         <div class='span8 col-md-12 columns twelve large-12'>
             <h2>Cellranger 2.1.1</h2>
-            <p>1. Please fill out the fields and copy/save the contents below the form to a file (<b>yee_run01_20180418.json</b>). Most of these fields and their descriptions are based on the <a href="https://www.ncbi.nlm.nih.gov/geo/info/examples/seq_template_v2.1.xls">GEO submission template</a>. <b>Make sure the extension is .json!</b></p>
-        <div id='cellranger-editor'></div>
+            <div id='cellranger-editor'></div>
         </div>
         <div class='span12 col-md-12 columns twelve large-12'>
-            <div>
-                <a href='#' id='direct_link'>Direct Link</a> (preserves schema, value, and options)
-            </div>
-            <h2>JSON Output</h2>
-            <p>Copy this file into a test document. You can also make changes to the JSON here and set the value in the editor by clicking <button class='btn btn-primary' id='setvalue'>Update Form</button></p>
-            <textarea id='cellranger-output' style='height: 800px;' class='form-control'></textarea>
+            <h2>JSON Output <button class='btn btn-primary' onclick="download('cellranger')">Download metadata</button></h2>
+            <textarea id='cellranger-output' style='display: none;' class='form-control'></textarea>
         </div>
         <div class='row'>
             <div class='span12 col-md-12 columns twelve large-12'>
@@ -108,20 +145,16 @@
 </div>
 
 <div id="DropseqTools" class="tabcontent">
-  <div class='container'>
-    <div class='row'>
-        <div class='span8 col-md-12 columns twelve large-12'>
-            <h2>DropSeqTools 1.0</h2>
-            <p>1. Please fill out the fields and copy/save the contents below the form to a file (<b>yee_run01_20180418.json</b>). Most of these fields and their descriptions are based on the <a href="https://www.ncbi.nlm.nih.gov/geo/info/examples/seq_template_v2.1.xls">GEO submission template</a>. <b>Make sure the extension is .json!</b></p>
-        <div id='dropseq-editor'></div>
-        </div>
-        <div class='span12 col-md-12 columns twelve large-12'>
-            <div>
-                <a href='#' id='direct_link'>Direct Link</a> (preserves schema, value, and options)
+      <div class='container'>
+        <div class='row'>
+            <div class='span8 col-md-12 columns twelve large-12'>
+                <h2>DropSeqTools 1.0</h2>
+                <div id='dropseq-editor'></div>
             </div>
-            <h2>JSON Output</h2>
-            <p>Copy this file into a test document. You can also make changes to the JSON here and set the value in the editor by clicking <button class='btn btn-primary' id='setvalue'>Update Form</button></p>
-            <textarea id='dropseq-output' style='height: 800px;' class='form-control'></textarea>
+            <div class='span12 col-md-12 columns twelve large-12'>
+                <h2>JSON Output <button class='btn btn-primary' onclick="download('dropseq')">Download metadata</button></h2>
+                <textarea id='dropseq-output' style='display: none;' class='form-control'></textarea>
+            </div>
         </div>
         <div class='row'>
             <div class='span12 col-md-12 columns twelve large-12'>
@@ -133,25 +166,18 @@
                 <a href='https://github.com/jdorn/json-editor' id='jdorn'>Created using JSON editor</a>
             </div>
         </div>
-    </div>
-  </div>
+      </div>
 </div>
-
 <div id="Imaging" class="tabcontent">
   <div class='container'>
     <div class='row'>
         <div class='span8 col-md-12 columns twelve large-12'>
-            <h4>Instructions (coming soon):</h4>
-            <p>1. Please fill out the fields and copy/save the contents below the form to a file (<b>yee_run01_20180418.json</b>). Most of these fields and their descriptions are based on the <a href="https://www.ncbi.nlm.nih.gov/geo/info/examples/seq_template_v2.1.xls">GEO submission template</a>. <b>Make sure the extension is .json!</b></p>
-        <div id='imaging-editor'></div>
+            <h2>Imaging 1.0</h2>
+            <div id='imaging-editor'></div>
         </div>
         <div class='span12 col-md-12 columns twelve large-12'>
-            <div>
-                <a href='#' id='direct_link'>Direct Link</a> (preserves schema, value, and options)
-            </div>
-            <h2>JSON Output</h2>
-            <p>Copy this file into a test document. You can also make changes to the JSON here and set the value in the editor by clicking <button class='btn btn-primary' id='setvalue'>Update Form</button></p>
-            <textarea id='imaging-output' style='height: 800px;' class='form-control'></textarea>
+            <h2>JSON Output <button class='btn btn-primary' onclick="download('imaging')">Download metadata</button></h2>
+            <textarea id='imaging-output' style='display: none;' class='form-control'></textarea>
         </div>
         <div class='row'>
             <div class='span12 col-md-12 columns twelve large-12'>
@@ -166,7 +192,6 @@
     </div>
   </div>
 </div>
-
 <script>
 (function() {
 
@@ -201,666 +226,20 @@
 
     // Default starting schema for cellranger
     if(!cellranger_schema) {
-        cellranger_schema = {
-            title: "Samples",
-            type: "object",
-            properties: {
-                aggr_nickname: {
-                    type: "string",
-                    default: "aggregated_01",
-                    description: "The eventual output directory for the aggregated output (if multisample expt, you may leave as-is for single sample expts)."
-                },
-                aggr_norm_method: {
-                    type: "string",
-                    default: "mapped",
-                    enum: [
-                        "mapped",
-                        "raw",
-                        "none"
-                    ],
-                    description: "See official documentation (<a href='https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/aggregate'>Depth Normalization</a>)"
-                },
-                assay_protocol: {
-                    type: "string",
-                    enum: [
-                        "chemV1",
-                        "chemV2"
-                    ],
-                    default: "chemV2",
-                    description: "Describe the chemistry version."
-                },
-                contact_email: {
-                    type: "string",
-                    default: "",
-                    description: "Describe point of contact for additional experimental details."
-                },
-                experiment_nickname: {
-                    type: "string",
-                    default: "expt_01",
-                    description: "Short, unique nickname that can be used to reference this experiment."
-                },
-                experiment_start_date: {
-                    type: "string",
-                    default: "2018-01-01",
-                    description: "Describe when this experiment was started (YYYY-MM-DD)."
-                },
-                experiment_summary: {
-                    type: "string",
-                    default: "",
-                    description: "Thorough description of the goals and objectives of this study. The abstract from the associated publication may be suitable. Include as much text as necessary."
-                },
-                extract_protocol_description: {
-                    type: "string",
-                    default: "",
-                    description: "Describe the protocols used to extract and prepare the material to be sequenced."
-                },
-                growth_protocol_description: {
-                    type: "string",
-                    default: "",
-                    description: "Optional. Describe the conditions that were used to grow/maintain organisms or cells prior to extract preperation."
-                },
-                investigator: {
-                    type: "string",
-                    default: "",
-                    description: "Main investigator responsible for this data."
-                },
-                library_construction_protocol: {
-                    type: "string",
-                    default: "10X Chromium chemistry V2",
-                    description: "Describe the library construction protocol."
-                },
-                library_strategy: {
-                    type: "string",
-                    default: "scRNA-Seq",
-                    description: "Leave as scRNA-Seq."
-                },
-                organism: {
-                    type: "string",
-                    enum: [
-                        "Human (HSA)",
-                        "Mouse (MMU)",
-                        "Rat (RNO)",
-                        "C. elegans (CEL)",
-                        "Barnyard (HSA+MMU)"
-                    ],
-                    description: "Intended organism of interest. Usually this corresponds to the reference genome specified below."
-                },
-                pi_name: {
-                    type: "string",
-                    default: "",
-                    description: "Usually PI or corresponding author."
-                },
-                processing_date: {
-                    type: "string",
-                    default: "2018-01-01",
-                    description: "Describe when this experiment was processed, typically the current date (YYYY-MM-DD)."
-                },
-                sequencing_center: {
-                    type: "string",
-                    default: "",
-                    description: "Name and secondary identifier (address or phone #) of the sequencing center or core (ie. IGM, 858-822-2754)."
-                },
-                sequencing_date: {
-                    type: "string",
-                    default: "2018-01-01",
-                    description: "Describe when this experiment came back from the sequencer (YYYY-MM-DD)."
-                },
-                treatment_protocol_description: {
-                    type: "string",
-                    default: "",
-                    description: "Optional. Describe the treatments applied to the biological material prior to extract preparation."
-                },
-                transcriptome: {
-                    type: "object",
-                    title: "Transcriptome directory",
-                    properties: {
-                        path: {
-                            type: "string",
-                            enum: [
-                              "refdata-cellranger-hg19-1.2.0",
-                              "refdata-cellranger-ercc92-1.2.0",
-                              "refdata-cellranger-GRCh38-1.2.0",
-                              "refdata-cellranger-mm10-1.2.0",
-                              "refdata-cellranger-hg19_and_mm10-1.2.0"
-                            ],
-                            default: "refdata-cellranger-hg19-1.2.0",
-                            description: "Human, mice, and barnyard reference datasets. See (<a href='https://support.10xgenomics.com/single-cell-gene-expression/software/downloads/latest'>official documentation</a>)."
-                        },
-                        class: {
-                            type: "string",
-                            enum: [
-                              "Directory"
-                            ],
-                            description: "Leave as 'Directory'"
-                        }
-                    }
-                },
-                samples: {
-                    type: "array",
-                    format: "grid",
-                    title: "Samples",
-                    items: {
-                        type: "object",
-                        title: "sample",
-                        properties: {
-                            library_nickname: {
-                                type: "string",
-                                default: "sample_01",
-                                description: "The eventual output directory for this single sample."
-                            },
-                            library_prep: {
-                                type: "string",
-                                default: "PolyA select",
-                                description: "Leave as is, unless there is an exception."
-                            },
-                            sample_id: {
-                                type: "string",
-                                default: "",
-                                description: "The prefix of the files located inside the fastq directory corresponding to the specific single sample within the fastq directory. See official documentation (<a href='https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/fastq-input'>--sample parameter</a>)"
-                            },
-                            fastq_dir: {
-                                type: "object",
-                                title: "Fastq directory",
-                                properties: {
-                                    path: {
-                                        type: "string",
-                                        default: "",
-                                        description: "This is the name of the directory you are uploading to on AWS, INSIDE fastq_dir. See official documentation (<a href='https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/fastq-input'>--fastqs</a>). You will just need the toplevel name of the directory, not the full path."
-                                    },
-                                    class: {
-                                        type: "string",
-                                        enum: [
-                                          "Directory"
-                                        ],
-                                        description: "Leave as 'Directory'"
-                                    }
-                                }
-                            },
-                            instrument_model: {
-                                type: "string",
-                                default: "Illumina HiSeq 4000",
-                                enum: [
-                                    "Illumina Genome Analyzer",
-                                    "Illumina Genome Analyzer II",
-                                    "Illumina Genome Analyzer IIx",
-                                    "Illumina HiSeq 2000",
-                                    "Illumina HiSeq 1000",
-                                    "Illumina HiSeq 2500",
-                                    "Illumina HiSeq 4000",
-                                    "Illumina NextSeq 500",
-                                    "Illumina MiSeq",
-                                    "AB SOLiD System",
-                                    "AB SOLiD System 2.0",
-                                    "AB SOLiD System 3.0",
-                                    "AB SOLiD 4 System",
-                                    "AB SOLiD 4hq System",
-                                    "AB SOLiD PI System",
-                                    "AB 5500xl Genetic Analyzer",
-                                    "AB 5500 Genetic Analyzer",
-                                    "454 GS",
-                                    "454 GS 20",
-                                    "454 GS FLX",
-                                    "454 GS Junior",
-                                    "454 GS FLX Titanium",
-                                    "Helicos HeliScope",
-                                    "PacBio RS",
-                                    "PacBio RS II",
-                                    "Complete Genomics",
-                                    "Ion Torrent PGM"
-                                ]
-                            },
-                            read1_length: {
-                                type: "number",
-                                default: 26
-                            },
-                            read2_length: {
-                                type: "number",
-                                default: 98
-                            },
-                            expect_cells: {
-                                type: "number",
-                                default: 3000,
-                                description: "Expected number of recovered cells. By default, 10X cellranger uses 3000."
-                            },
-                            characteristics: {
-                                type: "array",
-                                format: "grid",
-                                title: "Characteristics",
-                                description: "Replace 'tag' with a biosource characteristic (e.g. strain, tissue, developmental stage, tumor stage, etc), and then enter the value for each sample beneath (e.g. 129SV, brain, embryo, etc). You may add multiple characteristics columns to this template (see 'Metadata Example' spreadsheet).",
-                                items: {
-                                    title: "tag",
-                                    type: "object",
-                                    properties: {
-                                        name: {
-                                            type: "string",
-                                            default: "Tag (ie. cell type)"
-                                        },
-                                        value: {
-                                            type: "string",
-                                            default: "Tag value (ie. ES-derived neural progenitor cells)"
-                                        }
-                                    }
-                                }
-                            },
-                        }
-                    },
-                    default: [
-                    ]
-                }
-            }
-        }
+        cellranger_schema = default_cellranger;
+        pipeline = "cellranger";
     }
 
     // Default starting schema for dropseq
     if(!dropseq_schema) {
-        dropseq_schema = {
-            title: "Samples",
-            type: "object",
-            properties: {
-                assay_protocol: {
-                    type: "string",
-                    enum: [
-                        "SeqWell"
-                    ],
-                    description: "Leave as SeqWell unless there is an exception."
-                },
-                contact_email: {
-                    type: "string",
-                    default: "",
-                    description: "Describe point of contact for additional experimental details."
-                },
-                experiment_nickname: {
-                    type: "string",
-                    default: "expt_01",
-                    description: "Short, unique nickname that can be used to reference this experiment."
-                },
-                experiment_start_date: {
-                    type: "string",
-                    default: "2018-01-01",
-                    description: "Describe when this experiment was started (YYYY-MM-DD)."
-                },
-                experiment_summary: {
-                    type: "string",
-                    default: "",
-                    description: "Thorough description of the goals and objectives of this study. The abstract from the associated publication may be suitable. Include as much text as necessary."
-                },
-                extract_protocol_description: {
-                    type: "string",
-                    default: "",
-                    description: "Describe the protocols used to extract and prepare the material to be sequenced."
-                },
-                growth_protocol_description: {
-                    type: "string",
-                    default: "",
-                    description: "Optional. Describe the conditions that were used to grow/maintain organisms or cells prior to extract preperation."
-                },
-                investigator: {
-                    type: "string",
-                    default: "",
-                    description: "Main investigator responsible for this data."
-                },
-                library_construction_protocol: {
-                    type: "string",
-                    default: "",
-                    description: "Describe the library construction protocol."
-                },
-                library_strategy: {
-                    type: "string",
-                    default: "scRNA-Seq",
-                    description: "Leave as scRNA-Seq."
-                },
-                organism: {
-                    type: "string",
-                    enum: [
-                        "Human (HSA)",
-                        "Mouse (MMU)",
-                        "Rat (RNO)",
-                        "C. elegans (CEL)",
-                        "Barnyard (HSA+MMU)"
-                    ],
-                    description: "Intended organism of interest. Usually this corresponds to the reference genome specified below. If studying more than one species, please submit a separate manifest."
-                },
-                pi_name: {
-                    type: "string",
-                    default: "Gene Yeo",
-                    description: "Usually PI or corresponding author."
-                },
-                processing_date: {
-                    type: "string",
-                    default: "2018-01-01",
-                    description: "Describe when this experiment was processed, typically the current date (YYYY-MM-DD)."
-                },
-                sequencing_center: {
-                    type: "string",
-                    default: "",
-                    description: "Name and secondary identifier (address or phone #) of the sequencing center or core (ie. IGM, 858-822-2754)."
-                },
-                sequencing_date: {
-                    type: "string",
-                    default: "2018-01-01",
-                    description: "Describe when this experiment came back from the sequencer (YYYY-MM-DD)."
-                },
-                treatment_protocol_description: {
-                    type: "string",
-                    default: "",
-                    description: "Optional. Describe the treatments applied to the biological material prior to extract preparation."
-                },
-                samples: {
-                    type: "array",
-                    format: "grid",
-                    title: "Samples",
-                    items: {
-                        type: "object",
-                        title: "Sample",
-                        properties: {
-                            expt_id: {
-                                type: "string",
-                                default: "run_01"
-                            },
-                            library_prep: {
-                                type: "string",
-                                default: "PolyA select"
-                            },
-                            sample_id: {
-                                type: "string",
-                                default: "sample_01"
-                            },
-
-
-                            read1: {
-                                type: "object",
-                                title: "Fastq Read 1 File",
-                                properties: {
-                                    path: {
-                                        type: "string",
-                                        default: "fastq_R1.fastq.gz"
-                                    },
-                                    class: {
-                                        type: "string",
-                                        enum: [
-                                          "File"
-                                        ],
-                                        description: "Leave as 'File'"
-                                    }
-                                }
-                            },
-                            read1_length: {
-                                type: "number",
-                                default: 26
-                            },
-                            read2: {
-                                type: "object",
-                                title: "Fastq Read 2 File",
-                                properties: {
-                                    path: {
-                                        type: "string",
-                                        default: "fastq_R2.fastq.gz"
-                                    },
-                                    class: {
-                                        type: "string",
-                                        enum: [
-                                          "File"
-                                        ],
-                                        description: "Leave as 'File'"
-                                    }
-                                }
-                            },
-                            read2_length: {
-                                type: "number",
-                                default: 98
-                            },
-                            instrument_model: {
-                                type: "string",
-                                default: "Illumina HiSeq 4000",
-                                enum: [
-                                    "Illumina Genome Analyzer",
-                                    "Illumina Genome Analyzer II",
-                                    "Illumina Genome Analyzer IIx",
-                                    "Illumina HiSeq 2000",
-                                    "Illumina HiSeq 1000",
-                                    "Illumina HiSeq 2500",
-                                    "Illumina HiSeq 4000",
-                                    "Illumina NextSeq 500",
-                                    "Illumina MiSeq",
-                                    "AB SOLiD System",
-                                    "AB SOLiD System 2.0",
-                                    "AB SOLiD System 3.0",
-                                    "AB SOLiD 4 System",
-                                    "AB SOLiD 4hq System",
-                                    "AB SOLiD PI System",
-                                    "AB 5500xl Genetic Analyzer",
-                                    "AB 5500 Genetic Analyzer",
-                                    "454 GS",
-                                    "454 GS 20",
-                                    "454 GS FLX",
-                                    "454 GS Junior",
-                                    "454 GS FLX Titanium",
-                                    "Helicos HeliScope",
-                                    "PacBio RS",
-                                    "PacBio RS II",
-                                    "Complete Genomics",
-                                    "Ion Torrent PGM"
-                                ]
-                            },
-                            core_barcodes: {
-                                type: "integer",
-                                default: 2000,
-                                description: "Only count cells with at least this many reads."
-                            },
-                            expected_barcodes: {
-                                type: "integer",
-                                default: 2000,
-                                description: "Expected number of recovered cells."
-                            },
-                            species_genome_dir: {
-                                type: "object",
-                                title: "STAR index",
-                                properties: {
-                                    path: {
-                                        type: "string",
-                                        enum: [
-                                          "hg19_star/",
-                                          "mm10_star/",
-                                          "hg19mm10_star/"
-                                        ],
-                                        default: "hg19_star/"
-                                    },
-                                    class: {
-                                        type: "string",
-                                        enum: [
-                                          "Directory"
-                                        ],
-                                        description: "Leave as 'Directory'"
-                                    }
-                                }
-                            },
-                            species_reference_fasta: {
-                                type: "object",
-                                title: "Reference fasta",
-                                properties: {
-                                    path: {
-                                        type: "string",
-                                        enum: [
-                                          "hg19.fasta",
-                                          "mm10.fasta",
-                                          "hg19_mm10_transgenes.fasta"
-                                        ],
-                                        default: "hg19.fasta"
-                                    },
-                                    class: {
-                                        type: "string",
-                                        enum: [
-                                          "File"
-                                        ],
-                                        description: "Leave as 'File'"
-                                    }
-                                }
-                            },
-                            species_reference_refFlat: {
-                                type: "object",
-                                title: "refFlat file",
-                                properties: {
-                                    path: {
-                                        type: "string",
-                                        enum: [
-                                          "hg19.refFlat",
-                                          "mm10.refFlat",
-                                          "hg19_mm10_transgenes.refFlat"
-                                        ],
-                                        default: "hg19.refFlat"
-                                    },
-                                    class: {
-                                        type: "string",
-                                        enum: [
-                                          "File"
-                                        ],
-                                        description: "Leave as 'File'"
-                                    }
-                                }
-                            },
-                            characteristics: {
-                                type: "array",
-                                format: "grid",
-                                title: "Characteristics",
-                                description: "Replace 'tag' with a biosource characteristic (e.g. strain, tissue, developmental stage, tumor stage, etc), and then enter the value for each sample beneath (e.g. 129SV, brain, embryo, etc). You may add multiple characteristics columns to this template (see 'Metadata Example' spreadsheet).",
-                                items: {
-                                    title: "tag",
-                                    type: "object",
-                                    properties: {
-                                        name: {
-                                            type: "string",
-                                            default: "Tag (ie. cell type)"
-                                        },
-                                        value: {
-                                            type: "string",
-                                            default: "Tag value (ie. ES-derived neural progenitor cells)"
-                                        }
-                                    }
-                                }
-                            },
-                        }
-                    },
-                    default: [
-                    ]
-                }
-            }
-        }
+        dropseq_schema = default_dropseq;
+        pipeline = "dropseq";
     }
 
     // Default starting schema
     if(!imaging_schema) {
-        imaging_schema = {
-            title: "Samples",
-            type: "object",
-            properties: {
-                experiment_type: {
-                    type: "string",
-                    default: ""
-                },
-                contact_email: {
-                    type: "string",
-                    default: ""
-                },
-                experiment_nickname: {
-                    type: "string",
-                    default: ""
-                },
-                wells_per_plate: {
-                    type: "integer",
-                    default: 96
-                },
-                experiment_summary: {
-                    type: "string",
-                    default: ""
-                },
-                Channel_Type: {
-                    type: "string",
-                    default: ""
-                },
-                magnification_power: {
-                    type: "string",
-                    default: ""
-                },
-                investigator: {
-                    type: "string",
-                    default: "John Doe"
-                },
-                cell_growth_protocol: {
-                    type: "string",
-                    default: ""
-                },
-                number_of_plates: {
-                    type: "integer",
-                    default: 1
-                },
-                organism: {
-                    type: "string",
-                    enum: [
-                        "Human (HSA)",
-                        "Mouse (MMU)",
-                        "Rat (RNO)",
-                        "C. elegans (CEL)",
-                        "Barnyard (HSA+MMU)"
-                    ]
-                },
-                pi_name: {
-                    type: "string",
-                    default: "Gene Yeo"
-                },
-                image_capture_date: {
-                    type: "string",
-                    default: ""
-                },
-                microscope: {
-                    type: "string"
-                },
-                imaging_and_segmentation_software: {
-                    type: "string",
-                    default: ""
-                },
-                treatment_protocol_description: {
-                    type: "string",
-                    default: ""
-                },
-                samples: {
-                    type: "array",
-                    format: "grid",
-                    title: "Samples",
-                    items: {
-                        type: "object",
-                        title: "Sample",
-                        properties: {
-                            sample_id: {
-                                type: "string",
-                                default: "sample_01"
-                            },
-                            characteristics: {
-                                type: "array",
-                                format: "grid",
-                                title: "Characteristics",
-
-                                items: {
-                                    title: "tag",
-                                    type: "object",
-                                    properties: {
-                                        name: {
-                                            type: "string",
-                                            default: ""
-                                        },
-                                        value: {
-                                            type: "string",
-                                            default: ""
-                                        }
-                                    }
-                                }
-                            },
-                        }
-                    },
-                    default: [
-                    ]
-                }
-            }
-        }
+        imaging_schema = default_imaging;
+        pipeline = "imaging";
     }
 
     // Divs/textareas on the page
@@ -879,6 +258,10 @@
     var $imaging_editor = document.getElementById('imaging-editor');
     var $imaging_validate = document.getElementById('imaging-validate');
 
+    var $schema = document.getElementById('schema');
+    var $output = document.getElementById('output');
+    var $editor = document.getElementById('editor');
+    var $validate = document.getElementById('validate');
 
     // Buttons
     var $set_schema_button = document.getElementById('setschema');
@@ -887,7 +270,36 @@
     var cellranger_jsoneditor;
     var dropseq_jsoneditor;
     var imaging_jsoneditor;
+    var jsoneditor;
 
+    var updateDirectLink = function(pipeline) {
+        var url = window.location.href.replace(/\?.*/,'');
+
+        if (pipeline == 'cellranger') {
+            url += '?cellranger_schema='+LZString.compressToBase64(JSON.stringify(cellranger_schema));
+        }
+        else if (pipeline == 'dropseq') {
+            url += '?dropseq_schema='+LZString.compressToBase64(JSON.stringify(dropseq_schema));
+        }
+        else if (pipeline == 'imaging') {
+            url += '?imaging_schema='+LZString.compressToBase64(JSON.stringify(imaging_schema));
+        }
+
+        url += '&value='+LZString.compressToBase64(JSON.stringify(jsoneditor.getValue()));
+
+        for(var i in JSONEditor.defaults.options) {
+            if(!JSONEditor.defaults.options.hasOwnProperty(i)) continue;
+            if(JSONEditor.defaults.options[i]===false) continue;
+            else if(JSONEditor.defaults.options[i]===true) {
+                url += '&'+i;
+            }
+            else {
+                url += '&'+i+'='+JSONEditor.defaults.options[i];
+            }
+        }
+
+        document.getElementById('direct_link').href = url;
+    };
 
     var cellranger_updateDirectLink = function() {
         var url = window.location.href.replace(/\?.*/,'');
@@ -949,6 +361,58 @@
         document.getElementById('direct_link').href = url;
     };
 
+
+    var reload = function(keep_value, pipeline) {
+        if (pipeline == 'cellranger') {
+            var jsoneditor = cellranger_jsoneditor;
+            var schema = cellranger_schema;
+            var shebang = "#!/usr/bin/env cellranger-runner\n"
+            var output = $cellranger_output;
+        }
+        else if (pipeline == 'dropseq') {
+            var jsoneditor = dropseq_jsoneditor;
+            var schema = dropseq_schema;
+            var shebang = "#!/usr/bin/env dropseq-runner\n"
+        }
+        else if (pipeline == 'imaging') {
+            var jsoneditor = imaging_jsoneditor;
+            var schema = imaging_schema;
+            var shebang = "#!/usr/bin/env imaging-runner\n"
+        }
+        else {
+
+        }
+
+        var startval = (jsoneditor && keep_value)? jsoneditor.getValue() : window.startval;
+
+        window.startval = undefined;
+
+        if(jsoneditor) jsoneditor.destroy();
+        jsoneditor = new JSONEditor($jsoneditor,{
+            schema: schema,
+            startval: startval
+        });
+        window.jsoneditor = jsoneditor;
+
+        // When the value of the editor changes, update the JSON output and validation message
+        jsoneditor.on('change',function() {
+            var json = jsoneditor.getValue();
+
+            $output.value = $shebang + JSON.stringify(json,null,2);
+
+            // var validation_errors = jsoneditor.validate();
+            // Show validation errors if there are any
+            // if(validation_errors.length) {
+            //     $validate.value = JSON.stringify(validation_errors,null,2);
+            // }
+            // else {
+            //     $validate.value = 'valid';
+            // }
+            updateDirectLink(pipeline);
+        });
+    };
+
+
     var cellranger_reload = function(keep_value) {
         var startval = (cellranger_jsoneditor && keep_value)? cellranger_jsoneditor.getValue() : window.startval;
         window.startval = undefined;
@@ -966,16 +430,16 @@
 
             $cellranger_output.value = "#!/usr/bin/env cellranger-runner\n" + JSON.stringify(json,null,2);
 
-            var validation_errors = cellranger_jsoneditor.validate();
+            // var validation_errors = cellranger_jsoneditor.validate();
             // Show validation errors if there are any
-            if(validation_errors.length) {
-                $cellranger_validate.value = JSON.stringify(validation_errors,null,2);
-            }
-            else {
-                $cellranger_validate.value = 'valid';
-            }
+            // if(validation_errors.length) {
+            //     $cellranger_validate.value = JSON.stringify(validation_errors,null,2);
+            // }
+            // else {
+            //     $cellranger_validate.value = 'valid';
+            // }
 
-            cellranger_updateDirectLink();
+            // cellranger_updateDirectLink();
         });
     };
 
@@ -996,16 +460,16 @@
 
             $dropseq_output.value = "#!/usr/bin/env dropseq-runner\n" + JSON.stringify(json,null,2);
 
-            var validation_errors = dropseq_jsoneditor.validate();
+            // var validation_errors = dropseq_jsoneditor.validate();
             // Show validation errors if there are any
-            if(validation_errors.length) {
-                $dropseq_validate.value = JSON.stringify(validation_errors,null,2);
-            }
-            else {
-                $dropseq_validate.value = 'valid';
-            }
+            // if(validation_errors.length) {
+            //     $dropseq_validate.value = JSON.stringify(validation_errors,null,2);
+            // }
+            // else {
+            //     $dropseq_validate.value = 'valid';
+            // }
 
-            dropseq_updateDirectLink();
+            // dropseq_updateDirectLink();
         });
     };
 
@@ -1026,16 +490,16 @@
 
             $imaging_output.value = "#!/usr/bin/env imaging-runner\n" + JSON.stringify(json,null,2);
 
-            var validation_errors = imaging_jsoneditor.validate();
+            // var validation_errors = imaging_jsoneditor.validate();
             // Show validation errors if there are any
-            if(validation_errors.length) {
-                $imaging_validate.value = JSON.stringify(validation_errors,null,2);
-            }
-            else {
-                $imaging_validate.value = 'valid';
-            }
+            // if(validation_errors.length) {
+            //     $imaging_validate.value = JSON.stringify(validation_errors,null,2);
+            // }
+            // else {
+            //     $imaging_validate.value = 'valid';
+            // }
 
-            imaging_updateDirectLink();
+            // imaging_updateDirectLink();
         });
     };
 
@@ -1050,11 +514,11 @@
     $imaging_output.value = '';
 
     // When the 'update form' button is clicked, set the editor's value
-    $set_value_button.addEventListener('click',function() {
-        cellranger_jsoneditor.setValue(JSON.parse($cellranger_output.value));
-        dropseq_jsoneditor.setValue(JSON.parse($dropseq_output.value));
-        imaging_jsoneditor.setValue(JSON.parse($imaging_output.value));
-    });
+    // $set_value_button.addEventListener('click',function() {
+    //     cellranger_jsoneditor.setValue(JSON.parse($cellranger_output.value));
+    //     dropseq_jsoneditor.setValue(JSON.parse($dropseq_output.value));
+    //     imaging_jsoneditor.setValue(JSON.parse($imaging_output.value));
+    // });
 
     // Set the theme by loading the right stylesheets
     var setTheme = function(theme,no_reload) {
@@ -1156,6 +620,146 @@ function openPage(pageName,elmnt,color) {
     elmnt.style.backgroundColor = color;
 
 }
+
+function download(pipeline){
+    var text = document.getElementById(pipeline + "-output").value;
+    text = text.replace(/\n/g, "\r\n"); // To retain the Line breaks.
+    var blob = new Blob([text], { type: "text/plain"});
+    var anchor = document.createElement("a");
+    anchor.download = "my-filename.json";
+    anchor.href = window.URL.createObjectURL(blob);
+    anchor.target ="_blank";
+    anchor.style.display = "none"; // just to be safe!
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+ }
+
+
+JSONEditor.defaults.iconlibs.bootstrap2.prototype.mapping.time = "time";
+JSONEditor.defaults.iconlibs.bootstrap2.prototype.mapping.calendar = "calendar";
+JSONEditor.defaults.iconlibs.bootstrap3.prototype.mapping.time = "time";
+JSONEditor.defaults.iconlibs.bootstrap3.prototype.mapping.calendar = "calendar";
+JSONEditor.defaults.iconlibs.fontawesome3.prototype.mapping.time = "time";
+JSONEditor.defaults.iconlibs.fontawesome3.prototype.mapping.calendar = "calendar";
+JSONEditor.defaults.iconlibs.fontawesome4.prototype.mapping.time = "clock-o";
+JSONEditor.defaults.iconlibs.fontawesome4.prototype.mapping.calendar = "calendar";
+JSONEditor.defaults.iconlibs.foundation2.prototype.mapping.time = "clock";
+JSONEditor.defaults.iconlibs.foundation2.prototype.mapping.calendar = "calendar";
+JSONEditor.defaults.iconlibs.foundation3.prototype.mapping.time = "clock";
+JSONEditor.defaults.iconlibs.foundation3.prototype.mapping.calendar =	"calendar";
+JSONEditor.defaults.iconlibs.jqueryui.prototype.mapping.time = "clock";
+JSONEditor.defaults.iconlibs.jqueryui.prototype.mapping.calendar = "calendar";
+
+JSONEditor.defaults.languages.en.flatpickr_button = "Toggle";
+
+JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend(
+    {
+        build: function() {
+            this._super();
+            if (!this.input) return;
+
+            // helper functions
+            this.zeroPad = function(value) {
+                return ("0" + value).slice(-2);
+            };
+
+            if (window.flatpickr && typeof this.options.flatpickr == "object") {
+                // Make sure that flatpickr settings matches the input type
+                this.options.flatpickr.enableTime =
+                    this.schema.format == "date" ? false : true;
+                this.options.flatpickr.noCalendar =
+                    this.schema.format == "time" ? true : false;
+
+                var input = this.input;
+
+                if (this.options.flatpickr.wrap === true) {
+                    // Create input-group container
+                    var buttonContainer = this.theme.getContainer();
+                    buttonContainer.className = "input-group";
+
+                    // Insert container after input field
+                    this.input.parentNode.insertBefore(
+                        buttonContainer,
+                        this.input.nextSibling
+                    );
+
+                    // Move input into container
+                    buttonContainer.appendChild(this.input);
+
+                    // Attribute for flatpicker
+                    this.input.setAttribute("data-input", "");
+
+                    // Create button group and button
+                    var buttonGroup = this.theme.getContainer();
+                    buttonGroup.className = "input-group-btn";
+                    var button = this.getButton(
+                        "",
+                        this.schema.format == "time" ? "time" : "calendar",
+                        this.translate("flatpickr_button")
+                    );
+
+                    // Attribute for flatpicker
+                    button.setAttribute("data-toggle", "");
+
+                    buttonGroup.appendChild(button);
+                    buttonContainer.appendChild(buttonGroup);
+
+                    input = buttonContainer;
+                }
+
+                window.flatpickr(input, this.options.flatpickr);
+            }
+        },
+        getValue: function() {
+            if (!this.dependenciesFulfilled) {
+                return undefined;
+            }
+            if (this.schema.type == "string") {
+                return this.value;
+            }
+            if (this.value == "" || this.value === undefined) {
+                return undefined;
+            }
+
+            var value =
+                this.schema.format == "time" ? "1970-01-01 " + this.value : this.value;
+            return parseInt(new Date(value).getTime() / 1000);
+        },
+        setValue: function(value, initial, from_template) {
+            if (this.schema.type == "string") {
+                this._super();
+            } else {
+                var dateValue,
+                    dateObj = new Date(value * 1000),
+                    year = dateObj.getFullYear(),
+                    month = this.zeroPad(dateObj.getMonth() + 1),
+                    day = this.zeroPad(dateObj.getDate()),
+                    hour = this.zeroPad(dateObj.getHours()),
+                    min = this.zeroPad(dateObj.getMinutes()),
+                    sec = this.zeroPad(dateObj.getSeconds()),
+                    date = [year, month, day].join("-"),
+                    time = [hour, min, sec].join(":");
+
+                if (this.schema.format == "date") dateValue = date;
+                else if (this.schema.format == "time") dateValue = time;
+                else dateValue = date + " " + time;
+
+                this.value = dateValue;
+            }
+        }
+    }
+);
+
+JSONEditor.defaults.resolvers.unshift(function(schema) {
+    if (
+        ["string", "integer"].indexOf(schema.type) != -1 &&
+        ["date", "time", "datetime-local"].indexOf(schema.format) != -1
+    ) {
+        return "datetime";
+    }
+});
+
 // Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();
 
