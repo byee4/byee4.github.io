@@ -74,7 +74,7 @@ var default_imaging = {
             propertyOrder: 12,
             default: 1
         },
-        numerical_aperature: {
+        numerical_aperture: {
             type: "number",
             default: 1.0,
             propertyOrder: 13
