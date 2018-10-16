@@ -1,20 +1,24 @@
 var default_imaging = {
     title: "Experiment",
     type: "object",
+    layout: "select",
     properties: {
         investigator: {
             type: "string",
             default: "",
-            propertyOrder: 1
+            description: "Direct contact for this experiment.",
+            propertyOrder: 1,
         },
         pi_name: {
             type: "string",
             default: "",
+            description: "PI or corresponding author",
             propertyOrder: 2
         },
         contact_email: {
             type: "string",
             default: "",
+            description: "Direct contact email",
             propertyOrder: 3
         },
         experiment_start_date: {
@@ -26,12 +30,13 @@ var default_imaging = {
         experiment_nickname: {
             type: "string",
             default: "",
+            description: "Unique, arbitrary label, will be used for lookup/search.",
             propertyOrder: 5
         },
         experiment_summary: {
             type: "string",
-            default: "",
-            propertyOrder: 6
+            default: "Short summary of experiment. (e.g. working publication title or brief overview)",
+            propertyOrder: 10
         },
         experiment_type: {
             type: "string",
@@ -39,14 +44,16 @@ var default_imaging = {
                 "Stress granule",
                 "Dendrite morphology",
                 "Calcium imaging",
+                "Cell type",
+                "Synapse formation/assembly",
                 "Other"
             ],
-            propertyOrder: 7
+            propertyOrder: 11
         },
         custom_experiment_type: {
             type: "string",
-            default: "",
-            propertyOrder: 8
+            default: "If (Other), please describe the experiment type.",
+            propertyOrder: 12
         },
         organism: {
             type: "string",
@@ -57,27 +64,23 @@ var default_imaging = {
                 "C. elegans (CEL)",
                 "Barnyard (HSA+MMU)"
             ],
-            propertyOrder: 9
-        },
-        wells_per_plate: {
-            type: "integer",
-            default: 96,
-            propertyOrder: 10
+            propertyOrder: 13
         },
         channel_type: {
+            description: "Select [None] for super resolution imaging.",
             type: "string",
-            default: "",
-            propertyOrder: 11
-        },
-        magnification_power: {
-            type: "number",
-            propertyOrder: 12,
-            default: 1
+            enum: [
+                "Red",
+                "Green",
+                "Blue",
+                "Far red",
+                "None"
+            ],
+            propertyOrder: 14
         },
         numerical_aperture: {
             type: "number",
-            default: 1.0,
-            propertyOrder: 13
+            propertyOrder: 15
         },
         imaging_type: {
             type: "string",
@@ -85,30 +88,32 @@ var default_imaging = {
                 "High throughput",
                 "Low throughput",
                 "Confocal",
-                "Other"
+                "Brightfield",
+                "Super resolution"
             ],
             propertyOrder: 14
         },
-        custom_imaging_type: {
-            type: "string",
-            default: "",
-            propertyOrder: 15
-        },
-        microscope: {
+        microscope_brand: {
             type: "string",
             enum: [
-                "Microscope A",
-                "Microscope B",
+                "Nikon",
+                "Olympus",
+                "Leica",
+                "Meiji",
+                "Labomed",
+                "Accu-scope",
+                "Zeiss",
                 "Other"
             ],
+            propertyOrder: 15
+        },
+        microscope_model: {
+            description: "If brand is 'Other', please also include the brand name here (e.g. 'Nikon, Eclipse Ti-E'), otherwise include the model (e.g. 'Eclipse Ti-E').",
+            type: "string",
             propertyOrder: 16
         },
-        custom_microscope: {
-            type: "string",
-            default: "",
-            propertyOrder: 17
-        },
         imaging_and_segmentation_software: {
+            description: "Describe the software used to generate the final processed images.",
             type: "string",
             enum: [
                 "Cell Profiler",
@@ -126,7 +131,8 @@ var default_imaging = {
             ],
             propertyOrder: 18
         },
-        custom_imaging_and_segmentation_software: {
+        imaging_and_segmentation_software_version: {
+            description: "If software is 'Other', please also include the software name here (e.g. 'Cell Profiler, 3.1.5'), otherwise include the version (e.g. '3.1.5')",
             type: "string",
             default: "",
             propertyOrder: 19
@@ -136,15 +142,11 @@ var default_imaging = {
             default: "",
             propertyOrder: 20
         },
-        cell_growth_protocol: {
+        imaging_protocol_description: {
             type: "string",
             default: "",
+            description: "Describe in freeform text the imaging (ie. cell growth) protocol. If applicable, you may reference any Pubmed IDs here.",
             propertyOrder: 21
-        },
-        treatment_protocol_description: {
-            type: "string",
-            default: "",
-            propertyOrder: 22
         },
         samples: {
             type: "array",
@@ -157,7 +159,17 @@ var default_imaging = {
                     plate_filename: {
                         type: "string",
                         default: "plate_01.xlsx",
-                        description: "The base filename of the Excel sheet describing the plate map."
+                        description: "The base filename of the Excel sheet describing the plate map (you will upload this in the next step)."
+                    },
+                    staining: {
+                        type: "string",
+                        default: "",
+                        description: "(ie. protein name)",
+                    },
+                    treatment_protocol_description: {
+                        type: "string",
+                        default: "",
+                        description: "Describe in text the imaging protocol",
                     },
                     characteristics: {
                         type: "array",
@@ -170,11 +182,11 @@ var default_imaging = {
                             properties: {
                                 name: {
                                     type: "string",
-                                    default: "Tag (ie. cell type)"
+                                    default: "Tag (e.g. Fixation)"
                                 },
                                 value: {
                                     type: "string",
-                                    default: "Tag value (ie. ES-derived neural progenitor cells)"
+                                    default: "Tag value (e.g. Methanol)"
                                 }
                             }
                         }
