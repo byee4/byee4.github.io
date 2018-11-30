@@ -66,7 +66,7 @@ tab number 2.
 
 This ``.screenrc`` adds a status bar at the bottom of your screen, like this:
 
-.. image:: screen_status.png
+![screen](https://github.com/byee4/byee4.github.io/blob/master/img/screen.png)
 
 Now to start a screen session do:
 
