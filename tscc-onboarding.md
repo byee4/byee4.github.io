@@ -7,13 +7,13 @@ time limit) which allows us to use their portions when we need extra
 computing power.
 
 The main contacts for questions about TSCC are the `dry lab`_ and
-`TSCC users`_ mailing lists. The main contact for problems with TSCC is `Eva Hocks`_ (tscc-support@sdsc.edu)
+`TSCC users`_ mailing lists. The main contact for problems with TSCC is [Eva Hocks](tscc-support@sdsc.edu)
 
 # Important rules
 
-- 1. All sequencing data is stored in the ``/projects/ps-yeolab/seqdata`` folder unless otherwise specified.
-- 2. The folder ``seqdata`` is intended as permanent storage and no folders or files there should ever be deleted
-- 3. Do not process data in ``seqdata``. Use the directory structure described in `Organize your home directory`_ to create a ``scratch`` folder for all data processing.
+- All sequencing data is stored in the ``/projects/ps-yeolab/seqdata`` folder unless otherwise specified.
+- The folder ``seqdata`` is intended as permanent storage and no folders or files there should ever be deleted
+- Do not process data in ``seqdata``. Use the directory structure described in `Organize your home directory`_ to create a ``scratch`` folder for all data processing.
 
 # First Steps
 
@@ -350,7 +350,7 @@ This has two sections: Setup and Running. They should be done in order :)
 
 - First, on your personal computer,
 you will want to set up
-`passwordless ssh`_ from your laptop to TSCC. For reference, ``a@A`` is you from your laptop, and ``b@B`` is TSCC. So everywhere you see ``b@B``, replace that with ``yourusername@tscc.sdsc.edu``. For ``a@A``, since your laptop likely doesn't have a fixed IP address or a way to log in to it, you don't need to worry about replacing it. Instead, use ``a@A`` as a reference point for whether you should be doing the command from your laptop (``a@A``) or TSCC (``b@B``)
+[passwordless ssh](http://www.linuxproblem.org/art_9.html) from your laptop to TSCC. For reference, ``a@A`` is you from your laptop, and ``b@B`` is TSCC. So everywhere you see ``b@B``, replace that with ``yourusername@tscc.sdsc.edu``. For ``a@A``, since your laptop likely doesn't have a fixed IP address or a way to log in to it, you don't need to worry about replacing it. Instead, use ``a@A`` as a reference point for whether you should be doing the command from your laptop (``a@A``) or TSCC (``b@B``)
 
 - To set up IPython notebooks on TSCC, you will want to add some ``alias``
 variables to your ``~/.bash_profile`` (for Mac) or ``~/.bashrc`` (for Linux)
