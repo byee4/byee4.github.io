@@ -26,7 +26,9 @@ by everyone in the lab.
 
 First, log in to TSCC!
 
-```ssh YOUR_TSCC_USERNAME@tscc-login2.sdsc.edu```
+```
+ssh YOUR_TSCC_USERNAME@tscc-login2.sdsc.edu
+```
 
 TSCC has two login nodes, ``login1`` and ``login2`` for load-balancing (i.e.
 so if you just log on to ``tscc.sdsc.edu``, it'll choose whichever login
@@ -66,16 +68,20 @@ tab number 2.
 
 This ``.screenrc`` adds a status bar at the bottom of your screen, like this:
 
-![screen](https://github.com/byee4/byee4.github.io/blob/master/img/screen.png)
+![screen](http://byee4.github.io/img/screen.png)
 
 Now to start a screen session do:
 
-```screen```
+```
+screen
+```
 
 If you're re-logging in and you have an old screen session,
 do this to "re-attach" the screen window.
 
-```screen -x```
+```
+screen -x
+```
 
 Every time you log in to TSCC, you'll want to reattach the screens from
 before, so the first step I always take when I log in to TSCC is exactly
@@ -89,16 +95,22 @@ However in order to access these modules, you'll need to specify the path to whe
 
 - Copy the ``.bash_modules`` file from my home to yours:
     
-```cp /home/bay001/.bashrc_modules ~/```
+```
+cp /home/bay001/.bashrc_modules ~/
+```
 
 - Add this line to the **end** of your ``~/.bashrc`` file (using either ``nano`` ``emacs`` or ``vi``/``vim``, your choice)
 
-```source ~/.bashrc_modules```
+```
+source ~/.bashrc_modules
+```
 
 - "source the ``.bashrc`` file to apply the above changes to your environment.
     variables we've created.
 
-```source ~/.bashrc```
+```
+source ~/.bashrc
+```
 
 - Test that you can load and unload a module (typing ``module avail`` will list every module we have):
 
@@ -112,23 +124,33 @@ module unload samtools
 
 Download the Anaconda Python/R package manager using wget (web-get). The link below is from the Anaconda downloads page.
 
-    ```wget https://repo.anaconda.com/archive/Anaconda2-5.3.1-Linux-x86_64.sh```
+```
+wget https://repo.anaconda.com/archive/Anaconda2-5.3.1-Linux-x86_64.sh
+```
         
 To install Anaconda, run the shell script with bash (this will take some time). It will ask you a bunch of questions, and use the defaults for them (press enter for all)
 
-    ```bash Anaconda2-5.3.1-Linux-x86_64.sh```
+```
+bash Anaconda2-5.3.1-Linux-x86_64.sh
+```
     
 To activate anaconda, source your .bashrc:
 
-    ```source ~/.bashrc```
+```
+source ~/.bashrc
+```
     
 Make sure your Python is point to the Anaconda python with:
 
-    ```which python```
+```
+which python
+```
 
 The output should look something like:
 
-    ```~/anaconda2/bin/python```
+```
+~/anaconda2/bin/python
+```
 
 
 # Make a virtual environment on TSCC (optional)
@@ -146,17 +168,23 @@ The command ``$USER`` is meant to be literal, meaning you can exactly copy
 the below command, and TSCC will create an environment with your username.
 If you don't believe me, compare the output of:
 
-    ```echo USER```
+```
+echo USER
+```
 
 to the output of:
 
-    ```echo $USER```
+```
+echo $USER
+```
 
 The second one should output your TSCC username, because the ``$`` dollar
 sign indicates to the shell that you're asking for the variable ``$USER``,
 not the literal word "USER".
 
-```conda create --clone base --name $USER```
+```
+conda create --clone base --name $USER
+```
 
 ### Note:
 
@@ -164,21 +192,23 @@ You can also create an environment from scratch using ``conda`` to install
 all the Anaconda Python packages, and then using ``pip`` in the environment
 to install the remaining packages, like so:
 
-    ```
-    conda create --yes --name ENVIRONMENT_NAME pip numpy scipy cython matplotlib nose six scikit-learn ipython networkx pandas tornado statsmodels setuptools pytest pyzmq jinja2 pyyaml pymongo biopython markupsafe seaborn joblib semantic_version
-    source activate ENVIRONMENT_NAME
-    conda install --yes --channel https://conda.binstar.org/daler pybedtools
-    conda install --yes --channel https://conda.binstar.org/kyleabeauchamp fastcluster
-    pip install gspread brewer2mpl husl gffutils matplotlib-venn HTSeq misopy
-    pip install https://github.com/YeoLab/clipper/tarball/master
-    pip install https://github.com/YeoLab/gscripts/tarball/master
-    pip install https://github.com/YeoLab/flotilla/tarball/master
-    ```
+```
+conda create --yes --name ENVIRONMENT_NAME pip numpy scipy cython matplotlib nose six scikit-learn ipython networkx pandas tornado statsmodels setuptools pytest pyzmq jinja2 pyyaml pymongo biopython markupsafe seaborn joblib semantic_version
+source activate ENVIRONMENT_NAME
+conda install --yes --channel https://conda.binstar.org/daler pybedtools
+conda install --yes --channel https://conda.binstar.org/kyleabeauchamp fastcluster
+pip install gspread brewer2mpl husl gffutils matplotlib-venn HTSeq misopy
+pip install https://github.com/YeoLab/clipper/tarball/master
+pip install https://github.com/YeoLab/gscripts/tarball/master
+pip install https://github.com/YeoLab/flotilla/tarball/master
+```
 These commands is how the ``base`` environment was created.
 
 Then activate your environment with
 
-    ```source activate $USER```
+```
+source activate $USER
+```
 
 You'll probably stay in this environment all the time.
 
@@ -190,16 +220,18 @@ Then you will always be in your environment
 
 If you need to switch to another environment, then exit your environment with:
 
-    ```source deactivate```
+```
+source deactivate
+```
 
 # Add the location of ``GENOME`` to your ``~/.bashrc``
 
 To run the analysis pipeline, you will need to specify where the genomes are
 on TSCC, and you can do this by adding this line to your ``~/.bashrc``:
 
-
-
-    GENOME=/projects/ps-yeolab/genomes
+```
+GENOME=/projects/ps-yeolab/genomes
+```
 
 # Organize your home directory
 
@@ -221,7 +253,9 @@ It can be annoying to go back and forth between your scratch directory,
 so it's convenient to have a link to your scratch from home,
 which you can make like this:
 
-   ```ln -s /oasis/tscc/scratch/$USER $HOME/scratch```
+```
+ln -s /oasis/tscc/scratch/$USER $HOME/scratch
+```
 
 ### Note:
 
@@ -239,25 +273,27 @@ or less of storage. In particular, the large ``.sam`` and ``.bam`` files
 can get deleted, and you will have to re-run your analysis. Here are some tips for avoiding this:
 
 - Keep your metadata sample/cell counts are in your ``$HOME/projects`` or
-   ``/projects/ps-yeolab/$USER`` folder, which don't get purged
-   periodically. For "t-cell" users, instead of ``/projects/ps-yeolab/$USER``, 
-   your permanent storage will exist inside: ``/projects/ps-yeolab4/t_cell_p01_project/home/$USER``.
+``/projects/ps-yeolab/$USER`` folder, which don't get purged
+periodically. For "t-cell" users, instead of ``/projects/ps-yeolab/$USER``, 
+your permanent storage will exist inside: ``/projects/ps-yeolab4/t_cell_p01_project/home/$USER``.
 - Move important files to permanent storage (such as final BAM/BED/BIGWIG files, and QC metrics files) immediately
 - Use this recursive touch command to "refresh" the decay clock on your
-   files before important meetings and re-analysis steps:
+files before important meetings and re-analysis steps:
 
-        ```
-        cd important_scratch_dir
-        find . | xargs touch
-        ```
-            
+```
+cd important_scratch_dir
+find . | xargs touch
+```
+    
 # Create workflow and projects folders (optional)
 
 Create ``~/workflows`` for your personal bash, makefile, queue, and so on,
 scripts, and ``~/projects`` for your
 projects to organize figures, notebooks, final results, and even manuscripts.
 
-    ```mkdir ~/workflows ~/projects```
+```
+mkdir ~/workflows ~/projects
+```
 
 Here's an example project directory structure:
 
@@ -281,27 +317,29 @@ other processing scripts.
 Make everything readable by other yeo lab members and restrict access from
 other users (per HIPAA/HITECH requirements)
 
-    ```
-    chmod -R g+r ~/
-    chmod -R g+r ~/scratch/
-    chmod -R o-rwx ~/
-    chmod -R o-rwx ~/scratch/
-    ```
-    
+```
+chmod -R g+r ~/
+chmod -R g+r ~/scratch/
+chmod -R o-rwx ~/
+chmod -R o-rwx ~/scratch/
+```
+
 But ``git`` will get mad at you if your ~/.ssh keys private keys are visible
 by others, so make them visible to only you via:
 
-    ```chmod -R go-rwx ~/.ssh/```
+```
+chmod -R go-rwx ~/.ssh/
+```
 
 In the end, your '''home''' directory should look something like this:
 
-    ```
-    $ ls -l $HOME
-    lrwxrwxrwx  1 bkakarad yeo-group    29 Jun 24  2013 scratch -> /oasis/tscc/scratch/bkakarad/
-    drwxr-x---+ 2 bkakarad yeo-group     2 Jun 24  2013 gscripts
-    drwxr-x---+ 3 bkakarad yeo-group     3 Jun 24  2013 projects
-    drwxr-x---+ 2 bkakarad yeo-group     2 Jun 24  2013 workflows
-    ```
+```
+$ ls -l $HOME
+lrwxrwxrwx  1 bkakarad yeo-group    29 Jun 24  2013 scratch -> /oasis/tscc/scratch/bkakarad/
+drwxr-x---+ 2 bkakarad yeo-group     2 Jun 24  2013 gscripts
+drwxr-x---+ 3 bkakarad yeo-group     3 Jun 24  2013 projects
+drwxr-x---+ 2 bkakarad yeo-group     2 Jun 24  2013 workflows
+```
 
 # IPython notebooks on TSCC
 -------------------------
@@ -311,16 +349,16 @@ This has two sections: Setup and Running. They should be done in order :)
 ## Setup IPython notebooks on TSCC
 
 - First, on your personal computer,
-   you will want to set up
-   `passwordless ssh`_ from your laptop to TSCC. For reference, ``a@A`` is you from your laptop, and ``b@B`` is TSCC. So everywhere you see ``b@B``, replace that with ``yourusername@tscc.sdsc.edu``. For ``a@A``, since your laptop likely doesn't have a fixed IP address or a way to log in to it, you don't need to worry about replacing it. Instead, use ``a@A`` as a reference point for whether you should be doing the command from your laptop (``a@A``) or TSCC (``b@B``)
+you will want to set up
+`passwordless ssh`_ from your laptop to TSCC. For reference, ``a@A`` is you from your laptop, and ``b@B`` is TSCC. So everywhere you see ``b@B``, replace that with ``yourusername@tscc.sdsc.edu``. For ``a@A``, since your laptop likely doesn't have a fixed IP address or a way to log in to it, you don't need to worry about replacing it. Instead, use ``a@A`` as a reference point for whether you should be doing the command from your laptop (``a@A``) or TSCC (``b@B``)
 
 - To set up IPython notebooks on TSCC, you will want to add some ``alias``
-   variables to your ``~/.bash_profile`` (for Mac) or ``~/.bashrc`` (for Linux)
+variables to your ``~/.bash_profile`` (for Mac) or ``~/.bashrc`` (for Linux)
 
-    ```
-    IPYNB_PORT=[some number above 1024]
-    alias tscc='ssh obotvinnik@tscc-login2.sdsc.edu'
-    ```
+```
+IPYNB_PORT=[some number above 1024]
+alias tscc='ssh obotvinnik@tscc-login2.sdsc.edu'
+```
 
 
 This way, I can just type ``tscc`` and log onto ``tscc-login2``
@@ -335,29 +373,33 @@ this is just what I have set up. Just replace my login name
 
 - On TSCC, add these lines to your ``~/.bashrc`` file.
 
-       ```
-       IPYNB_PORT=same number as the above IPYNB_PORT from your laptop
-       alias ipynb="ipython notebook --no-browser --port $IPYNB_PORT &"
-       alias sshtscc="ssh -NR $IPYNB_PORT:localhost:$IPYNB_PORT tscc-login2 &"
-       ```
-       
-   Notice that in ``sshtscc``, I use the same port as I logged in to,
-   `tscc-login2`. The ampersands "`&`" at the end of the lines tell the computer
-   to run these processes in the background, which is super useful.
+```
+IPYNB_PORT=same number as the above IPYNB_PORT from your laptop
+alias ipynb="ipython notebook --no-browser --port $IPYNB_PORT &"
+alias sshtscc="ssh -NR $IPYNB_PORT:localhost:$IPYNB_PORT tscc-login2 &"
+```
    
+Notice that in ``sshtscc``, I use the same port as I logged in to,
+`tscc-login2`. The ampersands "`&`" at the end of the lines tell the computer
+to run these processes in the background, which is super useful.
+
 - You'll need to run ``source ~/.bashrc`` again on TSCC, so the ``$IPYNB_PORT`` variable, and ``ipynb``, ``sshtscc`` aliases are available.
 
 - Set up passwordless ssh between the compute nodes and TSCC with:
 
-    ```cat .ssh/id_rsa.pub >> .ssh/authorized_keys```
+```
+cat .ssh/id_rsa.pub >> .ssh/authorized_keys
+```
 
 - Back on your home laptop, edit your `~/.bash_profile` on macs,
    `~/.bashrc` for other unix machines to add the line:
 
-       ```alias tunneltscc="ssh -NL $IPYNB_PORT\:localhost:$IPYNB_PORT obotvinnik@tscc-login2.sdsc.edu &"```
+```
+alias tunneltscc="ssh -NL $IPYNB_PORT\:localhost:$IPYNB_PORT obotvinnik@tscc-login2.sdsc.edu &"
+```
 
-   Make sure to replace "``obotvinnik``" with your TSCC login :) It is
-   also important that these are double-quotes and not single-quotes, because the double-quotes evaluate the ``$IPYNB_PORT`` to the number you chose, e.g. ``4000``, whereas the single-quotes will keep it as the letters ``$IPYNB_PORT``.
+Make sure to replace "``obotvinnik``" with your TSCC login :) It is
+also important that these are double-quotes and not single-quotes, because the double-quotes evaluate the ``$IPYNB_PORT`` to the number you chose, e.g. ``4000``, whereas the single-quotes will keep it as the letters ``$IPYNB_PORT``.
 
 # Run IPython Notebooks on TSCC
 
@@ -367,7 +409,9 @@ Here are the steps to follow.
 - Log on to TSCC
 - Now that you have those set up, start up a ``screen`` session, which allows you to have something running continuously, without being logged in.
 
-    ```screen -x```
+```
+screen -x
+```
 
 ### Note:
 
@@ -383,17 +427,23 @@ and it will connect you to the only one you have open.
 
 - In this ``screen`` session, now request an interactive job, e.g.:
 
-    ```qsub -I -l walltime=2:00:00 -q home-yeo -l nodes=1:ppn=2```
+```
+qsub -I -l walltime=2:00:00 -q home-yeo -l nodes=1:ppn=2
+```
 
 - Wait for the job to start.
 
 - Run your TSCC-specific aliases on the compute node:
 
-    ```ipynb sshtscc```
+```
+ipynb sshtscc
+```
 
 - **Back on your laptop**, now run your tunneling command:
 
-    ```tunneltscc```
+```
+tunneltscc
+```
 
 - Open up ``http://localhost:[YOUR IPYNB PORT]`` on your browser.
 
@@ -402,18 +452,24 @@ and it will connect you to the only one you have open.
 
 To install Python packages first try ``conda install``:
 
-    ```conda install <package name>```
+```
+conda install <package name>
+```
 
 If there is no package in conda, then try `bioconda` (a google search for your package along with the keyword "bioconda" will tell you if this is available):
 
     
-    ```conda install -c bioconda <package name>```
+```
+conda install -c bioconda <package name>
+```
 
 
 If there is no package in conda, then (and ONLY then) try `pip`:
 
 
-    ```pip install <package name>```
+```
+pip install <package name>
+```
 
 To upgrade packages, do:
 
@@ -421,37 +477,49 @@ To upgrade packages, do:
 
 
 
-    ```conda update <package name>```
+```
+conda update <package name>
+```
 
 (using ``pip``)
 
 
 
-    ```pip install -U <package name>```
+```
+pip install -U <package name>
+```
 
 NOTE - you can see if your package is correctly installed in your anaconda with:
 
 
 
-    ```which <package name>```
+```
+which <package name>
+```
     
 Alternatively, you can open python on your command line with:
 
 
 
-    ```python```
+```
+python
+```
     
 And then try to import the package you just installed. If it doesn't throw an error, it installed successfully! 
 
 
 
-    ```import <package name>```
+```
+import <package name>
+```
     
 To get out of python on your command line:
 
 
 
-    ```quit()```
+```
+quit()
+```
     
 
 # Submitting and managing compute jobs on TSCC
@@ -464,8 +532,9 @@ To submit a script that you wrote, in this case called ``myscript.sh``,
 to TSCC, do:
 
 
-
-    qsub -q home-yeo -l nodes=1:ppn=2 -l walltime=0:30:00 myscript.sh
+```
+qsub -q home-yeo -l nodes=1:ppn=2 -l walltime=0:30:00 myscript.sh
+```
 
 ## Submit interactive jobs
 
@@ -473,9 +542,9 @@ to TSCC, do:
 To submit interactive jobs, do:
 
 
-
-    qsub -I -q home-yeo -l nodes=1:ppn=2 -l walltime=0:30:00
-
+```
+qsub -I -q home-yeo -l nodes=1:ppn=2 -l walltime=0:30:00
+```
 
 ## Submitting many jobs at once
 
@@ -499,9 +568,10 @@ fill in where <name> now sits as a placeholder.
 
 Check the status of your jobs (replace bay001 with your username):
 
-    qstat -u bay001
-
-``qstat -u bay001`` outputs,
+```
+qstat -u bay001
+```
+outputs,
 
 
 ```
@@ -523,7 +593,9 @@ status of the individual array pieces.
 
 
 
-    ```qstat -t```
+```
+qstat -t
+```
 
 
 ## Killing jobs
@@ -532,8 +604,9 @@ status of the individual array pieces.
 If you have a job you want to stop, kill it with ``qdel JOBID``, e.g.
 
 
-
-    qdel 2006527
+```
+qdel 2006527
+```
 
 ## Kill an array job
 
@@ -541,9 +614,9 @@ If you have a job you want to stop, kill it with ``qdel JOBID``, e.g.
 If the job is an array job, you'll need to add brackets, like this:
 
 
-
-    qdel 2006527[]
-
+```
+qdel 2006527[]
+```
 
 ## Kill all your jobs
 
@@ -551,9 +624,9 @@ If the job is an array job, you'll need to add brackets, like this:
 To kill all the jobs that you've submitted, do:
 
 
-
-    qdel $(qselect -u $USER)
-
+```
+qdel $(qselect -u $USER)
+```
 
 ## Which queue do I submit to? (check status of queues)
 
@@ -563,45 +636,47 @@ Generally, home-yeo queues move more quickly but we also have condo and hotel av
 to us should home-yeo queues be full.
 
 
-    ```qstat -q```
+```
+qstat -q
+```
 
 Example output is,
 
 
-    ```
-    (olga)[obotvinnik@tscc-login2 ~]$ qstat -q
+```
+(olga)[obotvinnik@tscc-login2 ~]$ qstat -q
 
-    server: tscc-mgr.local
+server: tscc-mgr.local
 
-    Queue            Memory CPU Time Walltime Node  Run Que Lm  State
-    ---------------- ------ -------- -------- ----  --- --- --  -----
-    home-dkeres        --      --       --      --    2   0 --   E R
-    home-komunjer      --      --       --      --    0   0 --   E R
-    home-ong           --      --       --      --    2   0 --   E R
-    home-tg            --      --       --      --    0   0 --   E R
-    home-yeo           --      --       --      --    3   1 --   E R
-    home-visres        --      --       --      --    0   0 --   E R
-    home-mccammon      --      --       --      --   15  29 --   E R
-    home-scrm          --      --       --      --    1   0 --   E R
-    hotel              --      --    168:00:0   --  232  26 --   E R
-    home-k4zhang       --      --       --      --    0   0 --   E R
-    home-kkey          --      --       --      --    0   0 --   E R
-    home-kyang         --      --       --      --    2   1 --   E R
-    home-jsebat        --      --       --      --    1   0 --   E R
-    pdafm              --      --    72:00:00   --    1   0 --   E R
-    condo              --      --    08:00:00   --   18   6 --   E R
-    gpu-hotel          --      --    336:00:0   --    0   0 --   E R
-    glean              --      --       --      --   24  75 --   E R
-    gpu-condo          --      --    08:00:00   --   16  36 --   E R
-    home-fpaesani      --      --       --      --    4   2 --   E R
-    home-builder       --      --       --      --    0   0 --   E R
-    home               --      --       --      --    0   0 --   E R
-    home-mgilson       --      --       --      --    0   4 --   E R
-    home-eallen        --      --       --      --    0   0 --   E R
-                                                   ----- -----
-                                                     321   180
-    ```
-    
+Queue            Memory CPU Time Walltime Node  Run Que Lm  State
+---------------- ------ -------- -------- ----  --- --- --  -----
+home-dkeres        --      --       --      --    2   0 --   E R
+home-komunjer      --      --       --      --    0   0 --   E R
+home-ong           --      --       --      --    2   0 --   E R
+home-tg            --      --       --      --    0   0 --   E R
+home-yeo           --      --       --      --    3   1 --   E R
+home-visres        --      --       --      --    0   0 --   E R
+home-mccammon      --      --       --      --   15  29 --   E R
+home-scrm          --      --       --      --    1   0 --   E R
+hotel              --      --    168:00:0   --  232  26 --   E R
+home-k4zhang       --      --       --      --    0   0 --   E R
+home-kkey          --      --       --      --    0   0 --   E R
+home-kyang         --      --       --      --    2   1 --   E R
+home-jsebat        --      --       --      --    1   0 --   E R
+pdafm              --      --    72:00:00   --    1   0 --   E R
+condo              --      --    08:00:00   --   18   6 --   E R
+gpu-hotel          --      --    336:00:0   --    0   0 --   E R
+glean              --      --       --      --   24  75 --   E R
+gpu-condo          --      --    08:00:00   --   16  36 --   E R
+home-fpaesani      --      --       --      --    4   2 --   E R
+home-builder       --      --       --      --    0   0 --   E R
+home               --      --       --      --    0   0 --   E R
+home-mgilson       --      --       --      --    0   4 --   E R
+home-eallen        --      --       --      --    0   0 --   E R
+                                               ----- -----
+                                                 321   180
+```
+
 So right now is not a good time to submit to the ``hotel`` queue,
 since it has a bunch of both running and queued jobs!
 
