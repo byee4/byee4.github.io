@@ -100,9 +100,11 @@ persist after your container is destroyed.
 
 With sshfs, you can mount your TSCC drive to a local directory. Instead of creating a local directory,
 you can then mount that mounted directory onto your Docker container, essentially creating a bridge 
-between files on TSCC and files inside your Docker container.
+between files on TSCC and files inside your Docker container. 
 
 ```(tscc) /home/bay001 -> (local) /Users/brian/bay001/ -> (docker) /home/rstudio/ ```
+
+#### [Instructions for installing sshfs on mac](http://byee4.github.io/sshfs) (sorry windows)
 
 ## Creating and running your container
 
