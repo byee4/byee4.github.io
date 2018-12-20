@@ -29,9 +29,11 @@ down below for new Docker users (like me):
 
 ## Verify docker installation
 
-First let's verify that installation worked by typing: 
+First let's verify that installation worked by typing
 
-```docker```
+```
+docker
+```
 
 Which should provide some of the most useful Docker commands. These include:
 - docker pull 
@@ -39,6 +41,7 @@ Which should provide some of the most useful Docker commands. These include:
 - docker run
 - docker images
 - docker ps
+
 
 ## (Option 1): Pull a docker image from dockerhub 
 
