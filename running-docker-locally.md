@@ -158,6 +158,27 @@ To start a stopped container, you can type ```docker start <container ID>```
 
 ```docker rmi <image_id>``` - remove an image
 
+# Creating a Singularity image from Dockerfiles
+
+There are probably way cleaner ways to do this, but this way is kind of a workaround 
+to get singularity images to run on TSCC (which does not have Docker installed). 
+- Install [Singularity](https://singularity.lbl.gov/install-linux)
+- Create a Singularity file from any Docker repository. The most basic file (from Docker)
+contains two lines. These lines will build a Singularity image directly from 
+the Docker repo. 
+```buildoutcfg
+Bootstrap: docker
+From: brianyee/cutadapt
+```
+- Build the image. 
+```
+sudo singularity build cutadapt.img Singularity.cutadapt 
+```
+- Run the image.
+```buildoutcfg
+singularity run cutadapt.img
+```
+
 # References/quick links
 
 - [Trapnell lab](http://cole-trapnell-lab.github.io/)
