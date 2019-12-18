@@ -5,9 +5,11 @@
 
 ## Get an interactive node
 - you probably only need 1-2 processors per node (```qsub -I -q home-yeo -l nodes=1:ppn=1 -l walltime=8:00:00```). 
-- Keep this window open and note the node that you got. It should be something like "```tscc-1-54```".
+- **Keep this window open** (or use a screen to preserve this node) and note the node that you got. It should be something like "```tscc-1-54```".
 
 ![ssh](http://byee4.github.io/img/ssh.png)
+
+(I am on tscc-1-48)
 
 ## On your local machine, install [xquartz](https://www.xquartz.org/) 
 - Make sure it's running (it's an application you should be able to click on. Otherwise, you can open a terminal window and type "xquartz" to run the program)
@@ -15,9 +17,9 @@
 ## Open an xquartz terminal and ssh into your interactive node
 - Use with special flags that indicate X11 forwarding (ie. ssh -X -Y bay001@tscc-1-54.sdsc.edu)
 
-![ssh](http://byee4.github.io/img/sshxy.png)
-
 ![xquartz](http://byee4.github.io/img/xquartz.png)
+
+![ssh](http://byee4.github.io/img/sshxy.png)
 
 ## Once you're in, load matlab and run it:
 
